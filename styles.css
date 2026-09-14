@@ -28,3 +28,5 @@
 @keyframes stereoSweep{0%,35%{transform:translateX(-100%)}65%,100%{transform:translateX(100%)}}@keyframes stereoJitter{0%,90%,100%{transform:translate(0)}92%{transform:translate(-2px,1px)}95%{transform:translate(2px,-1px)}}
 @media(max-width:850px){.stereo-toggle{display:none}.stereo-overlay{display:none}}@media(prefers-reduced-motion:reduce){.stereo-overlay{display:none}}
 @media(max-width:850px) and (prefers-reduced-motion:no-preference){.stereo-toggle{display:block}.stereo-overlay{display:flex;inset:4%}.hero.stereo-mode .stereo-overlay{opacity:.42}}
+.hero-copy.reveal,.hero-visual.reveal{opacity:1}.hero-copy h1,.hero-copy .hero-description,.hero-copy .hero-actions,.hero-visual{opacity:1!important;animation:none!important}.stereo-overlay{opacity:.18}.hero.stereo-mode .stereo-overlay{opacity:.72}
+@media(prefers-reduced-motion:reduce){.stereo-overlay{display:flex!important;opacity:.42!important;animation:none!important}.hero-copy h1,.hero-copy .hero-description,.hero-copy .hero-actions,.hero-visual{opacity:1!important;animation:none!important}}

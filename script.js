@@ -27,10 +27,10 @@
   const hero = document.querySelector('.hero');
   const systemReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   function setStereo(enabled) { hero.classList.toggle('stereo-mode', enabled); stereoToggle.setAttribute('aria-pressed', String(enabled)); stereoToggle.setAttribute('aria-label', enabled ? 'Desativar modo estéreo' : 'Ativar modo estéreo'); if (fxStatus) fxStatus.querySelector('span').textContent = enabled ? 'NEXULVI FX // S3D ACTIVE' : 'NEXULVI FX ONLINE'; storage.set('nexulvi-stereo-v3', enabled ? 'on' : 'off'); }
-  function setMotionReduction(reduced) { root.classList.toggle('reduce-motion', reduced); motionToggle.setAttribute('aria-pressed', String(reduced)); motionToggle.setAttribute('aria-label', reduced ? 'Ativar animações' : 'Reduzir animações'); if (reduced) setStereo(false); if (!systemReducedMotion) storage.set('nexulvi-motion-v3', reduced ? 'reduced' : 'full'); }
+  function setMotionReduction(reduced) { root.classList.toggle('reduce-motion', reduced); motionToggle.setAttribute('aria-pressed', String(reduced)); motionToggle.setAttribute('aria-label', reduced ? 'Ativar animações' : 'Reduzir animações'); if (!systemReducedMotion) storage.set('nexulvi-motion-v3', reduced ? 'reduced' : 'full'); }
   setMotionReduction(storage.get('nexulvi-motion-v3') === 'reduced' || systemReducedMotion);
   motionToggle.addEventListener('click', () => setMotionReduction(!root.classList.contains('reduce-motion')));
-  const stereoDefault = !systemReducedMotion && storage.get('nexulvi-stereo-v3', 'on') !== 'off';
+  const stereoDefault = storage.get('nexulvi-stereo-v3', 'on') !== 'off';
   setStereo(stereoDefault);
   stereoToggle.addEventListener('click', () => { if (!root.classList.contains('reduce-motion')) setStereo(!hero.classList.contains('stereo-mode')); });
   themeToggle.addEventListener('click', () => runViewTransition(() => setTheme(root.dataset.theme === 'light' ? 'dark' : 'light')));
