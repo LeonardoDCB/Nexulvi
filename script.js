@@ -5,6 +5,7 @@
   root.classList.add('js-ready');
   const fxStatus = document.querySelector('#fx-status');
   if (fxStatus) { fxStatus.classList.add('is-ready'); fxStatus.querySelector('span').textContent = 'NEXULVI FX ONLINE'; }
+  window.addEventListener('error', (event) => { if (fxStatus) fxStatus.querySelector('span').textContent = `FX ERROR // ${event.message || 'SCRIPT'}`; });
   const themeToggle = document.querySelector('#theme-toggle');
   const languageSelect = document.querySelector('#language-select');
   const menuToggle = document.querySelector('#menu-toggle');
@@ -25,11 +26,11 @@
   const stereoToggle = document.querySelector('#stereo-toggle');
   const hero = document.querySelector('.hero');
   const systemReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function setStereo(enabled) { hero.classList.toggle('stereo-mode', enabled); stereoToggle.setAttribute('aria-pressed', String(enabled)); stereoToggle.setAttribute('aria-label', enabled ? 'Desativar modo estéreo' : 'Ativar modo estéreo'); if (fxStatus) fxStatus.querySelector('span').textContent = enabled ? 'NEXULVI FX // S3D ACTIVE' : 'NEXULVI FX ONLINE'; storage.set('nexulvi-stereo-v2', enabled ? 'on' : 'off'); }
-  function setMotionReduction(reduced) { root.classList.toggle('reduce-motion', reduced); motionToggle.setAttribute('aria-pressed', String(reduced)); motionToggle.setAttribute('aria-label', reduced ? 'Ativar animações' : 'Reduzir animações'); if (reduced) setStereo(false); if (!systemReducedMotion) storage.set('nexulvi-motion-v2', reduced ? 'reduced' : 'full'); }
-  setMotionReduction(storage.get('nexulvi-motion-v2') === 'reduced' || systemReducedMotion);
+  function setStereo(enabled) { hero.classList.toggle('stereo-mode', enabled); stereoToggle.setAttribute('aria-pressed', String(enabled)); stereoToggle.setAttribute('aria-label', enabled ? 'Desativar modo estéreo' : 'Ativar modo estéreo'); if (fxStatus) fxStatus.querySelector('span').textContent = enabled ? 'NEXULVI FX // S3D ACTIVE' : 'NEXULVI FX ONLINE'; storage.set('nexulvi-stereo-v3', enabled ? 'on' : 'off'); }
+  function setMotionReduction(reduced) { root.classList.toggle('reduce-motion', reduced); motionToggle.setAttribute('aria-pressed', String(reduced)); motionToggle.setAttribute('aria-label', reduced ? 'Ativar animações' : 'Reduzir animações'); if (reduced) setStereo(false); if (!systemReducedMotion) storage.set('nexulvi-motion-v3', reduced ? 'reduced' : 'full'); }
+  setMotionReduction(storage.get('nexulvi-motion-v3') === 'reduced' || systemReducedMotion);
   motionToggle.addEventListener('click', () => setMotionReduction(!root.classList.contains('reduce-motion')));
-  const stereoDefault = !systemReducedMotion && storage.get('nexulvi-stereo-v2', 'on') !== 'off';
+  const stereoDefault = !systemReducedMotion && storage.get('nexulvi-stereo-v3', 'on') !== 'off';
   setStereo(stereoDefault);
   stereoToggle.addEventListener('click', () => { if (!root.classList.contains('reduce-motion')) setStereo(!hero.classList.contains('stereo-mode')); });
   themeToggle.addEventListener('click', () => runViewTransition(() => setTheme(root.dataset.theme === 'light' ? 'dark' : 'light')));
@@ -92,13 +93,13 @@
   function initNetworkCanvas() {
     const canvas = document.querySelector('#network-canvas');
     if (!canvas || root.classList.contains('reduce-motion') || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const context = canvas.getContext('2d'); if (!context) return;
+    const context = canvas.getContext('2d'); if (!context) { if (fxStatus) fxStatus.querySelector('span').textContent = 'NEXULVI FX // CSS FALLBACK'; return; }
     const hero = canvas.closest('.hero'); let width = 0; let height = 0; let particles = []; let mouseX = 0; let mouseY = 0; let scrollEnergy = 0; let lastScroll = window.scrollY;
     function resize() { const bounds = hero.getBoundingClientRect(); const dpr = Math.min(window.devicePixelRatio || 1, 2); width = bounds.width; height = bounds.height; canvas.width = width * dpr; canvas.height = height * dpr; context.setTransform(dpr, 0, 0, dpr, 0, 0); const isTouch = matchMedia('(hover: none)').matches; const count = Math.max(isTouch ? 45 : 85, Math.min(isTouch ? 90 : 190, Math.floor(width * height / (isTouch ? 14000 : 7600)))); particles = Array.from({ length: count }, () => ({ x: Math.random() * width, y: Math.random() * height, z: .25 + Math.random() * .9, vx: (Math.random() - .5) * .18, vy: (Math.random() - .5) * .18, size: .5 + Math.random() * 1.8, phase: Math.random() * Math.PI * 2 })); }
     function draw(time) { context.clearRect(0, 0, width, height); const centerX = width * .66 + mouseX * 55; const centerY = height * .48 + mouseY * 35; const localEnergy = Math.min(scrollEnergy, 1); particles.forEach((particle) => { particle.x += particle.vx * (1 + localEnergy * 5); particle.y += particle.vy * (1 + localEnergy * 5); if (particle.x < -20) particle.x = width + 20; if (particle.x > width + 20) particle.x = -20; if (particle.y < -20) particle.y = height + 20; if (particle.y > height + 20) particle.y = -20; const dx = particle.x - centerX; const dy = particle.y - centerY; const distance = Math.sqrt(dx * dx + dy * dy); if (distance < 170) { particle.x += dx / distance * .32; particle.y += dy / distance * .32; } const alpha = Math.max(.08, .55 - distance / 850) * particle.z; context.beginPath(); context.fillStyle = `rgba(141,255,224,${alpha})`; context.arc(particle.x + mouseX * particle.z * 20, particle.y + mouseY * particle.z * 14, particle.size * particle.z, 0, Math.PI * 2); context.fill(); });
       for (let i = 0; i < particles.length; i += 1) for (let j = i + 1; j < particles.length; j += 1) { const a = particles[i]; const b = particles[j]; const dx = a.x - b.x; const dy = a.y - b.y; const distance = Math.sqrt(dx * dx + dy * dy); if (distance < 108) { context.beginPath(); context.strokeStyle = `rgba(141,255,224,${(1 - distance / 108) * .23})`; context.lineWidth = .55; context.moveTo(a.x, a.y); context.lineTo(b.x, b.y); context.stroke(); } }
       const pulse = 38 + Math.sin(time * .002) * 8 + localEnergy * 22; const glow = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, pulse * 3); glow.addColorStop(0, 'rgba(141,255,224,.28)'); glow.addColorStop(.35, 'rgba(153,133,255,.1)'); glow.addColorStop(1, 'rgba(141,255,224,0)'); context.fillStyle = glow; context.beginPath(); context.arc(centerX, centerY, pulse * 3, 0, Math.PI * 2); context.fill(); scrollEnergy *= .93; window.requestAnimationFrame(draw); }
-    window.addEventListener('resize', resize); window.addEventListener('pointermove', (event) => { const rect = hero.getBoundingClientRect(); mouseX = (event.clientX - rect.left - rect.width / 2) / rect.width; mouseY = (event.clientY - rect.top - rect.height / 2) / rect.height; }, { passive: true }); window.addEventListener('scroll', () => { scrollEnergy = Math.min(1, Math.abs(window.scrollY - lastScroll) / 35); lastScroll = window.scrollY; }, { passive: true }); resize(); window.requestAnimationFrame(draw);
+    window.addEventListener('resize', resize); window.addEventListener('pointermove', (event) => { const rect = hero.getBoundingClientRect(); mouseX = (event.clientX - rect.left - rect.width / 2) / rect.width; mouseY = (event.clientY - rect.top - rect.height / 2) / rect.height; }, { passive: true }); window.addEventListener('scroll', () => { scrollEnergy = Math.min(1, Math.abs(window.scrollY - lastScroll) / 35); lastScroll = window.scrollY; }, { passive: true }); resize(); if (fxStatus) fxStatus.querySelector('span').textContent = 'NEXULVI FX // CANVAS + S3D'; window.requestAnimationFrame(draw);
   }
   initNetworkCanvas();
 })();

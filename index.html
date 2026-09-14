@@ -29,7 +29,7 @@
   <div class="cursor-system" aria-hidden="true"><span class="cursor-core"></span><span class="cursor-ring"></span><span class="cursor-label">EXPLORE</span></div>
   <div class="scroll-progress" aria-hidden="true"><span></span></div>
   <div class="scroll-orbit" aria-hidden="true"><span></span></div>
-  <div class="fx-status" id="fx-status" aria-live="polite"><i></i><span>NEXULVI FX STANDBY</span></div>
+  <div class="fx-status" id="fx-status" aria-live="polite"><i></i><span>NEXULVI FX BOOTING</span></div>
   <div class="site-loader" id="site-loader" aria-hidden="true"><div class="loader-mark"><i></i><i></i><i></i></div><div class="loader-meta"><span>NEXULVI // SYSTEM</span><strong>CONNECTING IDEAS</strong><span class="loader-percent">00%</span></div><div class="loader-bar"><span></span></div></div>
 
   <header class="site-header" id="top">
@@ -54,7 +54,7 @@
         <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 0 1 9.3 3.5 8.5 8.5 0 1 0 20.5 14.7Z"></path></svg>
       </button>
       <button class="icon-button motion-button" id="motion-toggle" type="button" aria-label="Reduzir animações" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h3m10 0h3M12 4v3m0 10v3M6.3 6.3l2.1 2.1m7.2 7.2 2.1 2.1m0-11.4-2.1 2.1m-7.2 7.2-2.1 2.1"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
-      <button class="stereo-toggle" id="stereo-toggle" type="button" aria-label="Ativar modo estéreo" aria-pressed="false"><span>S3D</span></button>
+      <button class="stereo-toggle" id="stereo-toggle" type="button" aria-label="Desativar modo estéreo" aria-pressed="true"><span>S3D</span></button>
       <button class="menu-button" id="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span></button>
     </div>
     <nav class="mobile-nav" id="mobile-nav" aria-label="Navegação móvel">
@@ -63,7 +63,7 @@
   </header>
 
   <main id="main-content">
-    <section class="hero section-shell" aria-labelledby="hero-title">
+    <section class="hero section-shell stereo-mode" aria-labelledby="hero-title">
       <canvas class="network-canvas" id="network-canvas" aria-hidden="true"></canvas>
       <div class="hero-grid" aria-hidden="true"></div>
       <div class="hero-orbit orbit-one" aria-hidden="true"></div><div class="hero-orbit orbit-two" aria-hidden="true"></div>
