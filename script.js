@@ -22,10 +22,16 @@
   const savedLanguage = storage.get('nexulvi-language') || 'pt'; languageSelect.value = savedLanguage; setLanguage(savedLanguage); setTheme(savedTheme);
   function runViewTransition(update) { if (document.startViewTransition && !root.classList.contains('reduce-motion')) document.startViewTransition(update); else update(); }
   const motionToggle = document.querySelector('#motion-toggle');
+  const stereoToggle = document.querySelector('#stereo-toggle');
+  const hero = document.querySelector('.hero');
   const systemReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function setMotionReduction(reduced) { root.classList.toggle('reduce-motion', reduced); motionToggle.setAttribute('aria-pressed', String(reduced)); motionToggle.setAttribute('aria-label', reduced ? 'Ativar animações' : 'Reduzir animações'); if (!systemReducedMotion) storage.set('nexulvi-motion', reduced ? 'reduced' : 'full'); }
+  function setStereo(enabled) { hero.classList.toggle('stereo-mode', enabled); stereoToggle.setAttribute('aria-pressed', String(enabled)); stereoToggle.setAttribute('aria-label', enabled ? 'Desativar modo estéreo' : 'Ativar modo estéreo'); storage.set('nexulvi-stereo', enabled ? 'on' : 'off'); }
+  function setMotionReduction(reduced) { root.classList.toggle('reduce-motion', reduced); motionToggle.setAttribute('aria-pressed', String(reduced)); motionToggle.setAttribute('aria-label', reduced ? 'Ativar animações' : 'Reduzir animações'); if (reduced) setStereo(false); if (!systemReducedMotion) storage.set('nexulvi-motion', reduced ? 'reduced' : 'full'); }
   setMotionReduction(storage.get('nexulvi-motion') === 'reduced' || systemReducedMotion);
   motionToggle.addEventListener('click', () => setMotionReduction(!root.classList.contains('reduce-motion')));
+  const stereoDefault = !systemReducedMotion && window.innerWidth > 850 && storage.get('nexulvi-stereo', 'on') !== 'off';
+  setStereo(stereoDefault);
+  stereoToggle.addEventListener('click', () => { if (!root.classList.contains('reduce-motion')) setStereo(!hero.classList.contains('stereo-mode')); });
   themeToggle.addEventListener('click', () => runViewTransition(() => setTheme(root.dataset.theme === 'light' ? 'dark' : 'light')));
   languageSelect.addEventListener('change', (event) => runViewTransition(() => setLanguage(event.target.value)));
   menuToggle.addEventListener('click', () => { const isOpen = mobileNav.classList.toggle('open'); menuToggle.setAttribute('aria-expanded', String(isOpen)); });
