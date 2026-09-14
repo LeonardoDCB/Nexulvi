@@ -16,6 +16,11 @@
   function setTheme(theme) { root.dataset.theme = theme; themeToggle.setAttribute('aria-pressed', theme === 'light'); themeToggle.setAttribute('aria-label', theme === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'); localStorage.setItem('nexulvi-theme', theme); }
   const savedTheme = localStorage.getItem('nexulvi-theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
   const savedLanguage = localStorage.getItem('nexulvi-language') || 'pt'; languageSelect.value = savedLanguage; setLanguage(savedLanguage); setTheme(savedTheme);
+  const motionToggle = document.querySelector('#motion-toggle');
+  const systemReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function setMotionReduction(reduced) { root.classList.toggle('reduce-motion', reduced); motionToggle.setAttribute('aria-pressed', String(reduced)); motionToggle.setAttribute('aria-label', reduced ? 'Ativar animações' : 'Reduzir animações'); if (!systemReducedMotion) localStorage.setItem('nexulvi-motion', reduced ? 'reduced' : 'full'); }
+  setMotionReduction(localStorage.getItem('nexulvi-motion') === 'reduced' || systemReducedMotion);
+  motionToggle.addEventListener('click', () => setMotionReduction(!root.classList.contains('reduce-motion')));
   themeToggle.addEventListener('click', () => setTheme(root.dataset.theme === 'light' ? 'dark' : 'light'));
   languageSelect.addEventListener('change', (event) => setLanguage(event.target.value));
   menuToggle.addEventListener('click', () => { const isOpen = mobileNav.classList.toggle('open'); menuToggle.setAttribute('aria-expanded', String(isOpen)); });
@@ -25,6 +30,10 @@
   const glow = document.querySelector('.cursor-glow');
   const progress = document.querySelector('.scroll-progress span');
   const header = document.querySelector('.site-header');
+  const loader = document.querySelector('#site-loader');
+  const loaderPercent = document.querySelector('.loader-percent');
+  let loaderValue = 0;
+  const loaderTimer = window.setInterval(() => { loaderValue = Math.min(loaderValue + Math.ceil(Math.random() * 17), 100); loaderPercent.textContent = `${String(loaderValue).padStart(2, '0')}%`; if (loaderValue >= 100) { window.clearInterval(loaderTimer); window.setTimeout(() => loader.classList.add('is-hidden'), 180); } }, 90);
   let ticking = false;
   function updateScrollEffects() {
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
@@ -41,7 +50,16 @@
   updateScrollEffects();
   const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
   if (canHover) {
-    window.addEventListener('pointermove', (event) => { glow.style.left = `${event.clientX}px`; glow.style.top = `${event.clientY}px`; }, { passive: true });
+    const cursorSystem = document.querySelector('.cursor-system');
+    const cursorCore = document.querySelector('.cursor-core');
+    const cursorRing = document.querySelector('.cursor-ring');
+    const cursorLabel = document.querySelector('.cursor-label');
+    let pointerX = window.innerWidth / 2; let pointerY = window.innerHeight / 2; let ringX = pointerX; let ringY = pointerY;
+    cursorSystem.classList.add('is-active');
+    function moveCursor() { ringX += (pointerX - ringX) * .16; ringY += (pointerY - ringY) * .16; cursorCore.style.left = `${pointerX}px`; cursorCore.style.top = `${pointerY}px`; cursorRing.style.left = `${ringX}px`; cursorRing.style.top = `${ringY}px`; cursorLabel.style.left = `${ringX}px`; cursorLabel.style.top = `${ringY}px`; window.requestAnimationFrame(moveCursor); }
+    moveCursor();
+    window.addEventListener('pointermove', (event) => { pointerX = event.clientX; pointerY = event.clientY; glow.style.left = `${event.clientX}px`; glow.style.top = `${event.clientY}px`; }, { passive: true });
+    document.querySelectorAll('a, button, select, .app-card').forEach((element) => { element.addEventListener('pointerenter', () => { cursorSystem.classList.add('is-hover'); cursorLabel.textContent = element.classList.contains('app-card') ? 'VIEW' : 'OPEN'; }); element.addEventListener('pointerleave', () => cursorSystem.classList.remove('is-hover')); });
     document.querySelectorAll('.button, .card-link, .text-link').forEach((element) => {
       element.addEventListener('pointermove', (event) => { const rect = element.getBoundingClientRect(); element.style.setProperty('--pointer-x', `${event.clientX - rect.left}px`); element.style.setProperty('--pointer-y', `${event.clientY - rect.top}px`); });
       element.addEventListener('pointerenter', () => glow.classList.add('cursor-hover'));
