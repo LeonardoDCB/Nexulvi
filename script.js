@@ -22,5 +22,39 @@
   mobileNav.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => { mobileNav.classList.remove('open'); menuToggle.setAttribute('aria-expanded', 'false'); }));
   const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } }), { threshold: .12 });
   document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
-  const glow = document.querySelector('.cursor-glow'); window.addEventListener('pointermove', (event) => { glow.style.left = event.clientX + 'px'; glow.style.top = event.clientY + 'px'; }, { passive: true });
+  const glow = document.querySelector('.cursor-glow');
+  const progress = document.querySelector('.scroll-progress span');
+  const header = document.querySelector('.site-header');
+  let ticking = false;
+  function updateScrollEffects() {
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    const amount = maxScroll > 0 ? Math.min(window.scrollY / maxScroll, 1) : 0;
+    root.style.setProperty('--scroll-progress', amount.toFixed(3));
+    root.style.setProperty('--scroll-scale', (0.7 + amount * 0.5).toFixed(3));
+    root.style.setProperty('--hero-parallax', Math.min(window.scrollY, 260).toFixed(1));
+    root.style.setProperty('--signal-angle', `${(window.scrollY * .035).toFixed(1)}deg`);
+    progress.style.width = `${amount * 100}%`;
+    header.classList.toggle('scrolled', window.scrollY > 18);
+    ticking = false;
+  }
+  window.addEventListener('scroll', () => { if (!ticking) { window.requestAnimationFrame(updateScrollEffects); ticking = true; } }, { passive: true });
+  updateScrollEffects();
+  const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (canHover) {
+    window.addEventListener('pointermove', (event) => { glow.style.left = `${event.clientX}px`; glow.style.top = `${event.clientY}px`; }, { passive: true });
+    document.querySelectorAll('.button, .card-link, .text-link').forEach((element) => {
+      element.addEventListener('pointermove', (event) => { const rect = element.getBoundingClientRect(); element.style.setProperty('--pointer-x', `${event.clientX - rect.left}px`); element.style.setProperty('--pointer-y', `${event.clientY - rect.top}px`); });
+      element.addEventListener('pointerenter', () => glow.classList.add('cursor-hover'));
+      element.addEventListener('pointerleave', () => glow.classList.remove('cursor-hover'));
+      element.addEventListener('click', (event) => { const rect = element.getBoundingClientRect(); const ripple = document.createElement('span'); ripple.className = 'ripple'; ripple.setAttribute('aria-hidden', 'true'); ripple.style.left = `${event.clientX - rect.left}px`; ripple.style.top = `${event.clientY - rect.top}px`; element.appendChild(ripple); ripple.addEventListener('animationend', () => ripple.remove(), { once: true }); });
+    });
+    document.querySelectorAll('.app-card').forEach((card) => {
+      card.addEventListener('pointermove', (event) => { const rect = card.getBoundingClientRect(); const x = (event.clientX - rect.left) / rect.width; const y = (event.clientY - rect.top) / rect.height; card.style.setProperty('--tilt-y', `${((x - .5) * 7).toFixed(2)}deg`); card.style.setProperty('--tilt-x', `${((.5 - y) * 7).toFixed(2)}deg`); card.style.setProperty('--shine-x', `${(x * 100).toFixed(1)}%`); card.style.setProperty('--shine-y', `${(y * 100).toFixed(1)}%`); });
+      card.addEventListener('pointerleave', () => { card.style.setProperty('--tilt-x', '0deg'); card.style.setProperty('--tilt-y', '0deg'); });
+    });
+  }
+  const sections = [...document.querySelectorAll('main section[id]')];
+  const navLinks = [...document.querySelectorAll('.desktop-nav a, .mobile-nav a')];
+  const sectionObserver = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) navLinks.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`)); }), { rootMargin: '-30% 0px -55% 0px' });
+  sections.forEach((section) => sectionObserver.observe(section));
 })();
