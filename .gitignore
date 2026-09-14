@@ -1,0 +1,17 @@
+# Sistema operacional
+Thumbs.db
+.DS_Store
+
+# Dependências e builds futuros
+node_modules/
+dist/
+.astro/
+
+# Configurações locais
+.env
+.env.*
+!.env.example
+
+# Editores
+.vscode/
+.idea/
