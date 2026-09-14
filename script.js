@@ -16,13 +16,14 @@
   function setTheme(theme) { root.dataset.theme = theme; themeToggle.setAttribute('aria-pressed', theme === 'light'); themeToggle.setAttribute('aria-label', theme === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'); localStorage.setItem('nexulvi-theme', theme); }
   const savedTheme = localStorage.getItem('nexulvi-theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
   const savedLanguage = localStorage.getItem('nexulvi-language') || 'pt'; languageSelect.value = savedLanguage; setLanguage(savedLanguage); setTheme(savedTheme);
+  function runViewTransition(update) { if (document.startViewTransition && !root.classList.contains('reduce-motion')) document.startViewTransition(update); else update(); }
   const motionToggle = document.querySelector('#motion-toggle');
   const systemReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   function setMotionReduction(reduced) { root.classList.toggle('reduce-motion', reduced); motionToggle.setAttribute('aria-pressed', String(reduced)); motionToggle.setAttribute('aria-label', reduced ? 'Ativar animações' : 'Reduzir animações'); if (!systemReducedMotion) localStorage.setItem('nexulvi-motion', reduced ? 'reduced' : 'full'); }
   setMotionReduction(localStorage.getItem('nexulvi-motion') === 'reduced' || systemReducedMotion);
   motionToggle.addEventListener('click', () => setMotionReduction(!root.classList.contains('reduce-motion')));
-  themeToggle.addEventListener('click', () => setTheme(root.dataset.theme === 'light' ? 'dark' : 'light'));
-  languageSelect.addEventListener('change', (event) => setLanguage(event.target.value));
+  themeToggle.addEventListener('click', () => runViewTransition(() => setTheme(root.dataset.theme === 'light' ? 'dark' : 'light')));
+  languageSelect.addEventListener('change', (event) => runViewTransition(() => setLanguage(event.target.value)));
   menuToggle.addEventListener('click', () => { const isOpen = mobileNav.classList.toggle('open'); menuToggle.setAttribute('aria-expanded', String(isOpen)); });
   mobileNav.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => { mobileNav.classList.remove('open'); menuToggle.setAttribute('aria-expanded', 'false'); }));
   const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } }), { threshold: .12 });
@@ -59,7 +60,7 @@
     function moveCursor() { ringX += (pointerX - ringX) * .16; ringY += (pointerY - ringY) * .16; cursorCore.style.left = `${pointerX}px`; cursorCore.style.top = `${pointerY}px`; cursorRing.style.left = `${ringX}px`; cursorRing.style.top = `${ringY}px`; cursorLabel.style.left = `${ringX}px`; cursorLabel.style.top = `${ringY}px`; window.requestAnimationFrame(moveCursor); }
     moveCursor();
     window.addEventListener('pointermove', (event) => { pointerX = event.clientX; pointerY = event.clientY; glow.style.left = `${event.clientX}px`; glow.style.top = `${event.clientY}px`; }, { passive: true });
-    document.querySelectorAll('a, button, select, .app-card').forEach((element) => { element.addEventListener('pointerenter', () => { cursorSystem.classList.add('is-hover'); cursorLabel.textContent = element.classList.contains('app-card') ? 'VIEW' : 'OPEN'; }); element.addEventListener('pointerleave', () => cursorSystem.classList.remove('is-hover')); });
+    document.querySelectorAll('a, button, select, .app-card, [data-cursor]').forEach((element) => { element.addEventListener('pointerenter', () => { cursorSystem.classList.add('is-hover'); cursorLabel.textContent = element.dataset.cursor || (element.classList.contains('app-card') ? 'VIEW' : 'OPEN'); }); element.addEventListener('pointerleave', () => cursorSystem.classList.remove('is-hover')); });
     document.querySelectorAll('.button, .card-link, .text-link').forEach((element) => {
       element.addEventListener('pointermove', (event) => { const rect = element.getBoundingClientRect(); element.style.setProperty('--pointer-x', `${event.clientX - rect.left}px`); element.style.setProperty('--pointer-y', `${event.clientY - rect.top}px`); });
       element.addEventListener('pointerenter', () => glow.classList.add('cursor-hover'));
@@ -75,4 +76,19 @@
   const navLinks = [...document.querySelectorAll('.desktop-nav a, .mobile-nav a')];
   const sectionObserver = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) navLinks.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`)); }), { rootMargin: '-30% 0px -55% 0px' });
   sections.forEach((section) => sectionObserver.observe(section));
+  const scenes = [...document.querySelectorAll('.scroll-scene')];
+  function updateScenes() { scenes.forEach((scene) => { const rect = scene.getBoundingClientRect(); const span = window.innerHeight + rect.height; const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / span)); scene.style.setProperty('--scene-progress', progress.toFixed(3)); scene.style.setProperty('--scene-lift', `${((.5 - progress) * 18).toFixed(1)}px`); }); }
+  window.addEventListener('scroll', updateScenes, { passive: true }); updateScenes();
+  function initNetworkCanvas() {
+    const canvas = document.querySelector('#network-canvas');
+    if (!canvas || root.classList.contains('reduce-motion') || matchMedia('(hover: none)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const context = canvas.getContext('2d'); if (!context) return;
+    const hero = canvas.closest('.hero'); let width = 0; let height = 0; let particles = []; let mouseX = 0; let mouseY = 0; let scrollEnergy = 0; let lastScroll = window.scrollY;
+    function resize() { const bounds = hero.getBoundingClientRect(); const dpr = Math.min(window.devicePixelRatio || 1, 2); width = bounds.width; height = bounds.height; canvas.width = width * dpr; canvas.height = height * dpr; context.setTransform(dpr, 0, 0, dpr, 0, 0); const count = Math.max(70, Math.min(170, Math.floor(width * height / 9000))); particles = Array.from({ length: count }, () => ({ x: Math.random() * width, y: Math.random() * height, z: .25 + Math.random() * .9, vx: (Math.random() - .5) * .18, vy: (Math.random() - .5) * .18, size: .5 + Math.random() * 1.8, phase: Math.random() * Math.PI * 2 })); }
+    function draw(time) { context.clearRect(0, 0, width, height); const centerX = width * .66 + mouseX * 55; const centerY = height * .48 + mouseY * 35; const localEnergy = Math.min(scrollEnergy, 1); particles.forEach((particle) => { particle.x += particle.vx * (1 + localEnergy * 5); particle.y += particle.vy * (1 + localEnergy * 5); if (particle.x < -20) particle.x = width + 20; if (particle.x > width + 20) particle.x = -20; if (particle.y < -20) particle.y = height + 20; if (particle.y > height + 20) particle.y = -20; const dx = particle.x - centerX; const dy = particle.y - centerY; const distance = Math.sqrt(dx * dx + dy * dy); if (distance < 170) { particle.x += dx / distance * .32; particle.y += dy / distance * .32; } const alpha = Math.max(.08, .55 - distance / 850) * particle.z; context.beginPath(); context.fillStyle = `rgba(141,255,224,${alpha})`; context.arc(particle.x + mouseX * particle.z * 20, particle.y + mouseY * particle.z * 14, particle.size * particle.z, 0, Math.PI * 2); context.fill(); });
+      for (let i = 0; i < particles.length; i += 1) for (let j = i + 1; j < particles.length; j += 1) { const a = particles[i]; const b = particles[j]; const dx = a.x - b.x; const dy = a.y - b.y; const distance = Math.sqrt(dx * dx + dy * dy); if (distance < 108) { context.beginPath(); context.strokeStyle = `rgba(141,255,224,${(1 - distance / 108) * .23})`; context.lineWidth = .55; context.moveTo(a.x, a.y); context.lineTo(b.x, b.y); context.stroke(); } }
+      const pulse = 38 + Math.sin(time * .002) * 8 + localEnergy * 22; const glow = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, pulse * 3); glow.addColorStop(0, 'rgba(141,255,224,.28)'); glow.addColorStop(.35, 'rgba(153,133,255,.1)'); glow.addColorStop(1, 'rgba(141,255,224,0)'); context.fillStyle = glow; context.beginPath(); context.arc(centerX, centerY, pulse * 3, 0, Math.PI * 2); context.fill(); scrollEnergy *= .93; window.requestAnimationFrame(draw); }
+    window.addEventListener('resize', resize); window.addEventListener('pointermove', (event) => { const rect = hero.getBoundingClientRect(); mouseX = (event.clientX - rect.left - rect.width / 2) / rect.width; mouseY = (event.clientY - rect.top - rect.height / 2) / rect.height; }, { passive: true }); window.addEventListener('scroll', () => { scrollEnergy = Math.min(1, Math.abs(window.scrollY - lastScroll) / 35); lastScroll = window.scrollY; }, { passive: true }); resize(); window.requestAnimationFrame(draw);
+  }
+  initNetworkCanvas();
 })();
