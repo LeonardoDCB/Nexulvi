@@ -25,11 +25,11 @@
   const stereoToggle = document.querySelector('#stereo-toggle');
   const hero = document.querySelector('.hero');
   const systemReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function setStereo(enabled) { hero.classList.toggle('stereo-mode', enabled); stereoToggle.setAttribute('aria-pressed', String(enabled)); stereoToggle.setAttribute('aria-label', enabled ? 'Desativar modo estéreo' : 'Ativar modo estéreo'); storage.set('nexulvi-stereo', enabled ? 'on' : 'off'); }
-  function setMotionReduction(reduced) { root.classList.toggle('reduce-motion', reduced); motionToggle.setAttribute('aria-pressed', String(reduced)); motionToggle.setAttribute('aria-label', reduced ? 'Ativar animações' : 'Reduzir animações'); if (reduced) setStereo(false); if (!systemReducedMotion) storage.set('nexulvi-motion', reduced ? 'reduced' : 'full'); }
-  setMotionReduction(storage.get('nexulvi-motion') === 'reduced' || systemReducedMotion);
+  function setStereo(enabled) { hero.classList.toggle('stereo-mode', enabled); stereoToggle.setAttribute('aria-pressed', String(enabled)); stereoToggle.setAttribute('aria-label', enabled ? 'Desativar modo estéreo' : 'Ativar modo estéreo'); if (fxStatus) fxStatus.querySelector('span').textContent = enabled ? 'NEXULVI FX // S3D ACTIVE' : 'NEXULVI FX ONLINE'; storage.set('nexulvi-stereo-v2', enabled ? 'on' : 'off'); }
+  function setMotionReduction(reduced) { root.classList.toggle('reduce-motion', reduced); motionToggle.setAttribute('aria-pressed', String(reduced)); motionToggle.setAttribute('aria-label', reduced ? 'Ativar animações' : 'Reduzir animações'); if (reduced) setStereo(false); if (!systemReducedMotion) storage.set('nexulvi-motion-v2', reduced ? 'reduced' : 'full'); }
+  setMotionReduction(storage.get('nexulvi-motion-v2') === 'reduced' || systemReducedMotion);
   motionToggle.addEventListener('click', () => setMotionReduction(!root.classList.contains('reduce-motion')));
-  const stereoDefault = !systemReducedMotion && window.innerWidth > 850 && storage.get('nexulvi-stereo', 'on') !== 'off';
+  const stereoDefault = !systemReducedMotion && storage.get('nexulvi-stereo-v2', 'on') !== 'off';
   setStereo(stereoDefault);
   stereoToggle.addEventListener('click', () => { if (!root.classList.contains('reduce-motion')) setStereo(!hero.classList.contains('stereo-mode')); });
   themeToggle.addEventListener('click', () => runViewTransition(() => setTheme(root.dataset.theme === 'light' ? 'dark' : 'light')));
