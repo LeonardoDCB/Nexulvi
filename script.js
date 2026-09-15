@@ -37,7 +37,7 @@
   languageSelect.addEventListener('change', (event) => runViewTransition(() => setLanguage(event.target.value)));
   menuToggle.addEventListener('click', () => { const isOpen = mobileNav.classList.toggle('open'); menuToggle.setAttribute('aria-expanded', String(isOpen)); });
   mobileNav.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => { mobileNav.classList.remove('open'); menuToggle.setAttribute('aria-expanded', 'false'); }));
-  const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } }), { threshold: .12 });
+  const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('visible'); if (entry.target.classList.contains('scroll-scene')) entry.target.classList.add('scene-live'); observer.unobserve(entry.target); } }), { threshold: .12 });
   document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
   const glow = document.querySelector('.cursor-glow');
   const progress = document.querySelector('.scroll-progress span');
@@ -54,6 +54,7 @@
     root.style.setProperty('--scroll-scale', (0.7 + amount * 0.5).toFixed(3));
     root.style.setProperty('--hero-parallax', Math.min(window.scrollY, 260).toFixed(1));
     root.style.setProperty('--signal-angle', `${(window.scrollY * .035).toFixed(1)}deg`);
+    document.body.classList.toggle('scene-charging', window.scrollY > 24);
     progress.style.width = `${amount * 100}%`;
     header.classList.toggle('scrolled', window.scrollY > 18);
     ticking = false;
@@ -68,14 +69,24 @@
     const cursorLabel = document.querySelector('.cursor-label');
     let pointerX = window.innerWidth / 2; let pointerY = window.innerHeight / 2; let ringX = pointerX; let ringY = pointerY;
     cursorSystem.classList.add('is-active');
-    function moveCursor() { ringX += (pointerX - ringX) * .16; ringY += (pointerY - ringY) * .16; cursorCore.style.left = `${pointerX}px`; cursorCore.style.top = `${pointerY}px`; cursorRing.style.left = `${ringX}px`; cursorRing.style.top = `${ringY}px`; cursorLabel.style.left = `${ringX}px`; cursorLabel.style.top = `${ringY}px`; window.requestAnimationFrame(moveCursor); }
+    const trail = document.createElement('div');
+    trail.className = 'cursor-trail';
+    const trailDots = Array.from({ length: 9 }, () => { const dot = document.createElement('i'); trail.appendChild(dot); return dot; });
+    const trailPoints = trailDots.map(() => ({ x: pointerX, y: pointerY }));
+    document.body.appendChild(trail);
+    function moveCursor() {
+      ringX += (pointerX - ringX) * .16; ringY += (pointerY - ringY) * .16;
+      cursorCore.style.left = `${pointerX}px`; cursorCore.style.top = `${pointerY}px`; cursorRing.style.left = `${ringX}px`; cursorRing.style.top = `${ringY}px`; cursorLabel.style.left = `${ringX}px`; cursorLabel.style.top = `${ringY}px`;
+      trailPoints.forEach((point, index) => { const target = index === 0 ? { x: pointerX, y: pointerY } : trailPoints[index - 1]; point.x += (target.x - point.x) * (.25 - index * .015); point.y += (target.y - point.y) * (.25 - index * .015); trailDots[index].style.left = `${point.x}px`; trailDots[index].style.top = `${point.y}px`; trailDots[index].style.opacity = `${Math.max(0, .48 - index * .045)}`; });
+      window.requestAnimationFrame(moveCursor);
+    }
     moveCursor();
     window.addEventListener('pointermove', (event) => { pointerX = event.clientX; pointerY = event.clientY; glow.style.left = `${event.clientX}px`; glow.style.top = `${event.clientY}px`; }, { passive: true });
     document.querySelectorAll('a, button, select, .app-card, [data-cursor]').forEach((element) => { element.addEventListener('pointerenter', () => { cursorSystem.classList.add('is-hover'); cursorLabel.textContent = element.dataset.cursor || (element.classList.contains('app-card') ? 'VIEW' : 'OPEN'); }); element.addEventListener('pointerleave', () => cursorSystem.classList.remove('is-hover')); });
     document.querySelectorAll('.button, .card-link, .text-link').forEach((element) => {
-      element.addEventListener('pointermove', (event) => { const rect = element.getBoundingClientRect(); element.style.setProperty('--pointer-x', `${event.clientX - rect.left}px`); element.style.setProperty('--pointer-y', `${event.clientY - rect.top}px`); });
+       element.addEventListener('pointermove', (event) => { const rect = element.getBoundingClientRect(); const localX = event.clientX - rect.left; const localY = event.clientY - rect.top; element.style.setProperty('--pointer-x', `${localX}px`); element.style.setProperty('--pointer-y', `${localY}px`); if (element.classList.contains('button')) { element.style.setProperty('--mag-x', `${((localX / rect.width) - .5) * 8}px`); element.style.setProperty('--mag-y', `${((localY / rect.height) - .5) * 5}px`); } });
       element.addEventListener('pointerenter', () => glow.classList.add('cursor-hover'));
-      element.addEventListener('pointerleave', () => glow.classList.remove('cursor-hover'));
+       element.addEventListener('pointerleave', () => { glow.classList.remove('cursor-hover'); element.style.setProperty('--mag-x', '0px'); element.style.setProperty('--mag-y', '0px'); });
       element.addEventListener('click', (event) => { const rect = element.getBoundingClientRect(); const ripple = document.createElement('span'); ripple.className = 'ripple'; ripple.setAttribute('aria-hidden', 'true'); ripple.style.left = `${event.clientX - rect.left}px`; ripple.style.top = `${event.clientY - rect.top}px`; element.appendChild(ripple); ripple.addEventListener('animationend', () => ripple.remove(), { once: true }); });
     });
      document.querySelectorAll('.app-card').forEach((card) => {
