@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 620" role="img" aria-labelledby="title desc">
+  <title id="title">Nexulvi interface system</title>
+  <desc id="desc">Futuristic blue interface with data panels and a scanning ring.</desc>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#071b2b"/><stop offset=".6" stop-color="#0b6474"/><stop offset="1" stop-color="#9ee9dd"/></linearGradient>
+    <linearGradient id="cyan"><stop stop-color="#8dffe0"/><stop offset="1" stop-color="#2a75ff"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="7" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="800" height="620" fill="url(#bg)"/>
+  <g stroke="#b7fff5" opacity=".2"><path d="M0 80h800M0 160h800M0 240h800M0 320h800M0 400h800M0 480h800M0 560h800"/><path d="M100 0v620M200 0v620M300 0v620M400 0v620M500 0v620M600 0v620M700 0v620"/></g>
+  <g fill="#06121c" fill-opacity=".56" stroke="#8dffe0" stroke-width="2"><rect x="72" y="72" width="266" height="168" rx="5"/><rect x="462" y="100" width="264" height="102" rx="5"/><rect x="110" y="370" width="580" height="120" rx="5"/></g>
+  <g stroke="url(#cyan)" stroke-width="3" fill="none" filter="url(#glow)"><circle cx="400" cy="310" r="126"/><circle cx="400" cy="310" r="91" stroke-dasharray="12 14"/><path d="M400 170v280M260 310h280"/><path d="M114 188h190M114 210h140M500 140h160M500 165h105M145 420h450M145 450h360"/></g>
+  <g fill="#8dffe0"><circle cx="400" cy="310" r="8"/><circle cx="310" cy="310" r="5"/><circle cx="490" cy="310" r="5"/></g>
+  <g fill="#e8fffa" font-family="monospace" font-size="12" letter-spacing="2"><text x="90" y="100">INTERFACE / 002</text><text x="485" y="128">SYNC 98.4%</text><text x="128" y="408">DATA STREAM //////////////////////</text></g>
+</svg>

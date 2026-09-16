@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 620" role="img" aria-labelledby="title desc">
+  <title id="title">Nexulvi experimental lab</title>
+  <desc id="desc">Lime radar and experimental geometry on a dark field.</desc>
+  <defs>
+    <radialGradient id="bg"><stop stop-color="#405d25"/><stop offset="1" stop-color="#101a15"/></radialGradient>
+    <linearGradient id="lime"><stop stop-color="#f4ffc9"/><stop offset=".5" stop-color="#d8ff70"/><stop offset="1" stop-color="#6fbc6c"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="800" height="620" fill="url(#bg)"/>
+  <g opacity=".2" stroke="#d8ff70"><path d="M0 120h800M0 240h800M0 360h800M0 480h800M160 0v620M320 0v620M480 0v620M640 0v620"/></g>
+  <g fill="none" stroke="url(#lime)" stroke-width="2" filter="url(#glow)"><circle cx="400" cy="310" r="190"/><circle cx="400" cy="310" r="132"/><circle cx="400" cy="310" r="72"/><path d="M400 80v460M170 310h460M238 148l324 324M562 148 238 472"/><path d="M400 310 550 164" stroke-width="5"/></g>
+  <path d="M400 310 550 164A190 190 0 0 1 400 500Z" fill="#d8ff70" opacity=".16"/>
+  <g fill="#d8ff70" filter="url(#glow)"><circle cx="550" cy="164" r="8"/><circle cx="400" cy="310" r="10"/></g>
+  <g fill="#efffb9" font-family="monospace" font-size="12" letter-spacing="2"><text x="34" y="38">LAB / EXPERIMENTAL FIELD</text><text x="605" y="594">VECTOR LOCKED</text></g>
+</svg>

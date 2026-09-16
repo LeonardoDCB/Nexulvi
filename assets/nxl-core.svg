@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 620" role="img" aria-labelledby="title desc">
+  <title id="title">Nexulvi core network</title>
+  <desc id="desc">Abstract green and violet network core made of connected nodes.</desc>
+  <defs>
+    <radialGradient id="bg"><stop stop-color="#183d48"/><stop offset="1" stop-color="#071018"/></radialGradient>
+    <radialGradient id="core"><stop stop-color="#effffb"/><stop offset=".12" stop-color="#8dffe0"/><stop offset=".45" stop-color="#227e84"/><stop offset="1" stop-color="#0b1b29"/></radialGradient>
+    <linearGradient id="line"><stop stop-color="#8dffe0"/><stop offset=".5" stop-color="#9985ff"/><stop offset="1" stop-color="#d8ff70"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="800" height="620" fill="url(#bg)"/>
+  <g opacity=".18" stroke="#8dffe0"><path d="M0 110h800M0 220h800M0 330h800M0 440h800M0 550h800M120 0v620M240 0v620M360 0v620M480 0v620M600 0v620M720 0v620"/></g>
+  <g fill="none" stroke="url(#line)" stroke-width="2" opacity=".75" filter="url(#glow)"><path d="M80 120 400 310 710 90M400 310 650 520M400 310 140 500M80 120 45 45M710 90l52-45M650 520l80 55M140 500l-95 65"/><circle cx="400" cy="310" r="145"/><ellipse cx="400" cy="310" rx="260" ry="95" transform="rotate(-28 400 310)"/></g>
+  <circle cx="400" cy="310" r="86" fill="url(#core)" stroke="#8dffe0" stroke-width="2" filter="url(#glow)"/>
+  <g fill="#8dffe0" filter="url(#glow)"><circle cx="80" cy="120" r="7"/><circle cx="710" cy="90" r="7"/><circle cx="650" cy="520" r="7"/><circle cx="140" cy="500" r="7"/><circle cx="400" cy="310" r="12"/></g>
+  <g fill="#aebfc1" font-family="monospace" font-size="12" letter-spacing="2"><text x="28" y="32">NXL / CORE NETWORK</text><text x="620" y="598">SIGNAL ACTIVE</text></g>
+</svg>

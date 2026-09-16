@@ -28,10 +28,10 @@ if (canvas && hero && visual) {
     const geometry = new THREE.IcosahedronGeometry(.055, 1);
     const palette = [0x8dffe0, 0x9985ff, 0xd8ff70, 0xffffff];
     const nodes = [];
-    for (let index = 0; index < 170; index += 1) {
+    for (let index = 0; index < 260; index += 1) {
       const material = new THREE.MeshBasicMaterial({ color: palette[index % palette.length], transparent: true, opacity: .55 + Math.random() * .45 });
       const node = new THREE.Mesh(geometry, material);
-      node.position.set((Math.random() - .5) * 6.2, (Math.random() - .5) * 6.4, (Math.random() - .5) * 5.2);
+      node.position.set((Math.random() - .5) * 7.2, (Math.random() - .5) * 7.4, (Math.random() - .5) * 6.2);
       node.scale.setScalar(.5 + Math.random() * 1.8);
       node.userData = { angle: Math.random() * Math.PI * 2, radius: .08 + Math.random() * .24, speed: .0004 + Math.random() * .0012 };
       group.add(node);
@@ -39,14 +39,14 @@ if (canvas && hero && visual) {
     }
 
     const rings = new THREE.Group();
-    [1.1, 1.45, 1.85].forEach((radius, index) => {
-      const ring = new THREE.Mesh(new THREE.TorusGeometry(radius, .006, 8, 96), new THREE.MeshBasicMaterial({ color: palette[index], transparent: true, opacity: .55 }));
+    [1.1, 1.45, 1.85, 2.2].forEach((radius, index) => {
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(radius, index === 3 ? .012 : .009, 8, 128), new THREE.MeshBasicMaterial({ color: palette[index % palette.length], transparent: true, opacity: .68 }));
       ring.rotation.set(index * .8, index * .45, index * .35);
       rings.add(ring);
     });
     group.add(rings);
 
-    const core = new THREE.Mesh(new THREE.IcosahedronGeometry(.62, 2), new THREE.MeshBasicMaterial({ color: 0x8dffe0, wireframe: true, transparent: true, opacity: .7 }));
+    const core = new THREE.Mesh(new THREE.IcosahedronGeometry(.72, 3), new THREE.MeshBasicMaterial({ color: 0x8dffe0, wireframe: true, transparent: true, opacity: .86 }));
     group.add(core);
 
     let pointerX = 0;
