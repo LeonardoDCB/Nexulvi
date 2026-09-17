@@ -29,8 +29,21 @@
   const stereoToggle = document.querySelector('#stereo-toggle');
   const hero = document.querySelector('.hero');
   const systemReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function setStereo(enabled) { hero.classList.toggle('stereo-mode', enabled); stereoToggle.setAttribute('aria-pressed', String(enabled)); stereoToggle.setAttribute('aria-label', enabled ? 'Desativar modo estéreo' : 'Ativar modo estéreo'); if (fxStatus) fxStatus.querySelector('span').textContent = enabled ? 'NEXULVI FX // S3D ACTIVE' : 'NEXULVI FX ONLINE'; storage.set('nexulvi-stereo-v3', enabled ? 'on' : 'off'); }
-  function setMotionReduction(reduced) { root.classList.toggle('reduce-motion', reduced); motionToggle.setAttribute('aria-pressed', String(reduced)); motionToggle.setAttribute('aria-label', reduced ? 'Ativar animações' : 'Reduzir animações'); if (!systemReducedMotion) storage.set('nexulvi-motion-v3', reduced ? 'reduced' : 'full'); }
+  function setStereo(enabled) {
+    hero.classList.toggle('stereo-mode', enabled);
+    stereoToggle.setAttribute('aria-pressed', String(enabled));
+    stereoToggle.setAttribute('aria-label', enabled ? 'Desativar modo estéreo' : 'Ativar modo estéreo');
+    if (fxStatus) fxStatus.querySelector('span').textContent = enabled ? 'NEXULVI FX // S3D ACTIVE' : 'NEXULVI FX ONLINE';
+    storage.set('nexulvi-stereo-v3', enabled ? 'on' : 'off');
+    document.dispatchEvent(new CustomEvent('nexulvi:stereo-change', { detail: { enabled } }));
+  }
+  function setMotionReduction(reduced) {
+    root.classList.toggle('reduce-motion', reduced);
+    motionToggle.setAttribute('aria-pressed', String(reduced));
+    motionToggle.setAttribute('aria-label', reduced ? 'Ativar animações' : 'Reduzir animações');
+    if (!systemReducedMotion) storage.set('nexulvi-motion-v3', reduced ? 'reduced' : 'full');
+    document.dispatchEvent(new CustomEvent('nexulvi:motion-change', { detail: { reduced } }));
+  }
   setMotionReduction(storage.get('nexulvi-motion-v3') === 'reduced' || systemReducedMotion);
   motionToggle.addEventListener('click', () => setMotionReduction(!root.classList.contains('reduce-motion')));
   const stereoDefault = storage.get('nexulvi-stereo-v3', 'on') !== 'off';
@@ -38,8 +51,28 @@
   stereoToggle.addEventListener('click', () => { if (!root.classList.contains('reduce-motion')) setStereo(!hero.classList.contains('stereo-mode')); });
   themeToggle.addEventListener('click', () => runViewTransition(() => setTheme(root.dataset.theme === 'light' ? 'dark' : 'light')));
   languageSelect.addEventListener('change', (event) => runViewTransition(() => setLanguage(event.target.value)));
-  menuToggle.addEventListener('click', () => { const isOpen = mobileNav.classList.toggle('open'); menuToggle.setAttribute('aria-expanded', String(isOpen)); });
-  mobileNav.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => { mobileNav.classList.remove('open'); menuToggle.setAttribute('aria-expanded', 'false'); }));
+  menuToggle.setAttribute('aria-controls', 'mobile-nav');
+  let menuLastFocus = null;
+  function setMenu(open) {
+    mobileNav.classList.toggle('open', open);
+    mobileNav.toggleAttribute('hidden', !open);
+    mobileNav.toggleAttribute('inert', !open);
+    menuToggle.setAttribute('aria-expanded', String(open));
+    if (open) {
+      menuLastFocus = document.activeElement;
+      mobileNav.querySelector('a')?.focus();
+    } else if (menuLastFocus instanceof HTMLElement) {
+      menuLastFocus.focus();
+    }
+  }
+  mobileNav.toggleAttribute('hidden', true);
+  mobileNav.toggleAttribute('inert', true);
+  menuToggle.addEventListener('click', () => setMenu(!mobileNav.classList.contains('open')));
+  mobileNav.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenu(false)));
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && mobileNav.classList.contains('open')) setMenu(false);
+  });
+  matchMedia('(min-width: 851px)').addEventListener('change', (event) => { if (event.matches) setMenu(false); });
   const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('visible'); if (entry.target.classList.contains('scroll-scene')) entry.target.classList.add('scene-live'); observer.unobserve(entry.target); } }), { threshold: .12 });
   document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
   const glow = document.querySelector('.cursor-glow');
@@ -77,12 +110,17 @@
     const trailDots = Array.from({ length: 9 }, () => { const dot = document.createElement('i'); trail.appendChild(dot); return dot; });
     const trailPoints = trailDots.map(() => ({ x: pointerX, y: pointerY }));
     document.body.appendChild(trail);
+    let cursorFrame = 0;
     function moveCursor() {
+      cursorFrame = 0;
+      if (document.hidden || root.classList.contains('reduce-motion')) return;
       ringX += (pointerX - ringX) * .16; ringY += (pointerY - ringY) * .16;
       cursorCore.style.left = `${pointerX}px`; cursorCore.style.top = `${pointerY}px`; cursorRing.style.left = `${ringX}px`; cursorRing.style.top = `${ringY}px`; cursorLabel.style.left = `${ringX}px`; cursorLabel.style.top = `${ringY}px`;
       trailPoints.forEach((point, index) => { const target = index === 0 ? { x: pointerX, y: pointerY } : trailPoints[index - 1]; point.x += (target.x - point.x) * (.25 - index * .015); point.y += (target.y - point.y) * (.25 - index * .015); trailDots[index].style.left = `${point.x}px`; trailDots[index].style.top = `${point.y}px`; trailDots[index].style.opacity = `${Math.max(0, .48 - index * .045)}`; });
-      window.requestAnimationFrame(moveCursor);
+      cursorFrame = window.requestAnimationFrame(moveCursor);
     }
+    const pauseCursor = () => { if (document.hidden || root.classList.contains('reduce-motion')) { if (cursorFrame) window.cancelAnimationFrame(cursorFrame); cursorFrame = 0; } else if (!cursorFrame) cursorFrame = window.requestAnimationFrame(moveCursor); };
+    document.addEventListener('visibilitychange', pauseCursor); document.addEventListener('nexulvi:motion-change', pauseCursor);
     moveCursor();
     window.addEventListener('pointermove', (event) => { pointerX = event.clientX; pointerY = event.clientY; glow.style.left = `${event.clientX}px`; glow.style.top = `${event.clientY}px`; }, { passive: true });
     document.querySelectorAll('a, button, select, .app-card, [data-cursor]').forEach((element) => { element.addEventListener('pointerenter', () => { cursorSystem.classList.add('is-hover'); cursorLabel.textContent = element.dataset.cursor || (element.classList.contains('app-card') ? 'VIEW' : 'OPEN'); }); element.addEventListener('pointerleave', () => cursorSystem.classList.remove('is-hover')); });
@@ -107,18 +145,59 @@
   const sectionObserver = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) navLinks.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`)); }), { rootMargin: '-30% 0px -55% 0px' });
   sections.forEach((section) => sectionObserver.observe(section));
   const scenes = [...document.querySelectorAll('.scroll-scene')];
-  function updateScenes() { scenes.forEach((scene) => { const rect = scene.getBoundingClientRect(); const span = window.innerHeight + rect.height; const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / span)); scene.style.setProperty('--scene-progress', progress.toFixed(3)); scene.style.setProperty('--scene-lift', `${((.5 - progress) * 18).toFixed(1)}px`); }); }
-  window.addEventListener('scroll', updateScenes, { passive: true }); updateScenes();
+   let scenesTicking = false;
+   function updateScenes() { scenes.forEach((scene) => { const rect = scene.getBoundingClientRect(); const span = window.innerHeight + rect.height; const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / span)); scene.style.setProperty('--scene-progress', progress.toFixed(3)); scene.style.setProperty('--scene-lift', `${((.5 - progress) * 18).toFixed(1)}px`); }); scenesTicking = false; }
+  window.addEventListener('scroll', () => { if (!scenesTicking) { window.requestAnimationFrame(updateScenes); scenesTicking = true; } }, { passive: true }); updateScenes();
   function initNetworkCanvas() {
     const canvas = document.querySelector('#network-canvas');
     if (!canvas || root.classList.contains('reduce-motion') || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const context = canvas.getContext('2d'); if (!context) { if (fxStatus) fxStatus.querySelector('span').textContent = 'NEXULVI FX // CSS FALLBACK'; return; }
-    const hero = canvas.closest('.hero'); let width = 0; let height = 0; let particles = []; let mouseX = 0; let mouseY = 0; let scrollEnergy = 0; let lastScroll = window.scrollY;
-    function resize() { const bounds = hero.getBoundingClientRect(); const dpr = Math.min(window.devicePixelRatio || 1, 2); width = bounds.width; height = bounds.height; canvas.width = width * dpr; canvas.height = height * dpr; context.setTransform(dpr, 0, 0, dpr, 0, 0); const isTouch = matchMedia('(hover: none)').matches; const count = Math.max(isTouch ? 45 : 85, Math.min(isTouch ? 90 : 190, Math.floor(width * height / (isTouch ? 14000 : 7600)))); particles = Array.from({ length: count }, () => ({ x: Math.random() * width, y: Math.random() * height, z: .25 + Math.random() * .9, vx: (Math.random() - .5) * .18, vy: (Math.random() - .5) * .18, size: .5 + Math.random() * 1.8, phase: Math.random() * Math.PI * 2 })); }
-    function draw(time) { context.clearRect(0, 0, width, height); const centerX = width * .66 + mouseX * 55; const centerY = height * .48 + mouseY * 35; const localEnergy = Math.min(scrollEnergy, 1); particles.forEach((particle) => { particle.x += particle.vx * (1 + localEnergy * 5); particle.y += particle.vy * (1 + localEnergy * 5); if (particle.x < -20) particle.x = width + 20; if (particle.x > width + 20) particle.x = -20; if (particle.y < -20) particle.y = height + 20; if (particle.y > height + 20) particle.y = -20; const dx = particle.x - centerX; const dy = particle.y - centerY; const distance = Math.sqrt(dx * dx + dy * dy); if (distance < 170) { particle.x += dx / distance * .32; particle.y += dy / distance * .32; } const alpha = Math.max(.08, .55 - distance / 850) * particle.z; context.beginPath(); context.fillStyle = `rgba(141,255,224,${alpha})`; context.arc(particle.x + mouseX * particle.z * 20, particle.y + mouseY * particle.z * 14, particle.size * particle.z, 0, Math.PI * 2); context.fill(); });
-      for (let i = 0; i < particles.length; i += 1) for (let j = i + 1; j < particles.length; j += 1) { const a = particles[i]; const b = particles[j]; const dx = a.x - b.x; const dy = a.y - b.y; const distance = Math.sqrt(dx * dx + dy * dy); if (distance < 108) { context.beginPath(); context.strokeStyle = `rgba(141,255,224,${(1 - distance / 108) * .23})`; context.lineWidth = .55; context.moveTo(a.x, a.y); context.lineTo(b.x, b.y); context.stroke(); } }
-      const pulse = 38 + Math.sin(time * .002) * 8 + localEnergy * 22; const glow = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, pulse * 3); glow.addColorStop(0, 'rgba(141,255,224,.28)'); glow.addColorStop(.35, 'rgba(153,133,255,.1)'); glow.addColorStop(1, 'rgba(141,255,224,0)'); context.fillStyle = glow; context.beginPath(); context.arc(centerX, centerY, pulse * 3, 0, Math.PI * 2); context.fill(); scrollEnergy *= .93; window.requestAnimationFrame(draw); }
-    window.addEventListener('resize', resize); window.addEventListener('pointermove', (event) => { const rect = hero.getBoundingClientRect(); mouseX = (event.clientX - rect.left - rect.width / 2) / rect.width; mouseY = (event.clientY - rect.top - rect.height / 2) / rect.height; }, { passive: true }); window.addEventListener('scroll', () => { scrollEnergy = Math.min(1, Math.abs(window.scrollY - lastScroll) / 35); lastScroll = window.scrollY; }, { passive: true }); resize(); if (fxStatus) fxStatus.querySelector('span').textContent = 'NEXULVI FX // CANVAS + S3D'; window.requestAnimationFrame(draw);
+    const context = canvas.getContext('2d');
+    if (!context) { if (fxStatus) fxStatus.querySelector('span').textContent = 'NEXULVI FX // CSS FALLBACK'; return; }
+    const networkHero = canvas.closest('.hero');
+    let width = 0; let height = 0; let particles = []; let mouseX = 0; let mouseY = 0; let scrollEnergy = 0; let lastScroll = window.scrollY;
+    let frameId = 0; let visible = true; let paused = document.hidden;
+    let centerGradient = null; let gradientRadius = 0; let gradientX = 0; let gradientY = 0;
+    const isTouch = matchMedia('(hover: none)').matches;
+    function resize() {
+      const bounds = networkHero.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, isTouch ? 1.5 : 2);
+      width = bounds.width; height = bounds.height;
+      canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr);
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const count = Math.max(isTouch ? 36 : 70, Math.min(isTouch ? 72 : 150, Math.floor(width * height / (isTouch ? 16000 : 9000))));
+      particles = Array.from({ length: count }, () => ({ x: Math.random() * width, y: Math.random() * height, z: .25 + Math.random() * .9, vx: (Math.random() - .5) * .18, vy: (Math.random() - .5) * .18, size: .5 + Math.random() * 1.8 }));
+      centerGradient = null; gradientRadius = 0;
+    }
+    function schedule() { if (!frameId && visible && !paused) frameId = window.requestAnimationFrame(draw); }
+    function draw(time) {
+      frameId = 0;
+      if (!visible || paused) return;
+      context.clearRect(0, 0, width, height);
+      const centerX = width * .66 + mouseX * 55; const centerY = height * .48 + mouseY * 35; const localEnergy = Math.min(scrollEnergy, 1);
+      particles.forEach((particle) => {
+        particle.x += particle.vx * (1 + localEnergy * 5); particle.y += particle.vy * (1 + localEnergy * 5);
+        if (particle.x < -20) particle.x = width + 20; if (particle.x > width + 20) particle.x = -20;
+        if (particle.y < -20) particle.y = height + 20; if (particle.y > height + 20) particle.y = -20;
+        const dx = particle.x - centerX; const dy = particle.y - centerY; const distanceSq = dx * dx + dy * dy;
+        if (distanceSq < 28900 && distanceSq > 0) { const distance = Math.sqrt(distanceSq); particle.x += dx / distance * .32; particle.y += dy / distance * .32; }
+        const distance = Math.sqrt(distanceSq); const alpha = Math.max(.08, .55 - distance / 850) * particle.z;
+        context.beginPath(); context.fillStyle = `rgba(141,255,224,${alpha})`; context.arc(particle.x + mouseX * particle.z * 20, particle.y + mouseY * particle.z * 14, particle.size * particle.z, 0, Math.PI * 2); context.fill();
+      });
+      for (let i = 0; i < particles.length; i += 1) for (let j = i + 1; j < particles.length; j += 1) {
+        const a = particles[i]; const b = particles[j]; const dx = a.x - b.x; const dy = a.y - b.y; const distanceSq = dx * dx + dy * dy;
+        if (distanceSq < 11664) { const distance = Math.sqrt(distanceSq); context.beginPath(); context.strokeStyle = `rgba(141,255,224,${(1 - distance / 108) * .23})`; context.lineWidth = .55; context.moveTo(a.x, a.y); context.lineTo(b.x, b.y); context.stroke(); }
+      }
+      const pulse = 38 + Math.sin(time * .002) * 8 + localEnergy * 22; const radius = Math.round(pulse * 3); const roundedX = Math.round(centerX); const roundedY = Math.round(centerY);
+      if (!centerGradient || gradientRadius !== radius || gradientX !== roundedX || gradientY !== roundedY) { centerGradient = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius); centerGradient.addColorStop(0, 'rgba(141,255,224,.28)'); centerGradient.addColorStop(.35, 'rgba(153,133,255,.1)'); centerGradient.addColorStop(1, 'rgba(141,255,224,0)'); gradientRadius = radius; gradientX = roundedX; gradientY = roundedY; }
+      context.fillStyle = centerGradient; context.beginPath(); context.arc(centerX, centerY, radius, 0, Math.PI * 2); context.fill(); scrollEnergy *= .93; schedule();
+    }
+    const visibilityObserver = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; if (visible) schedule(); else if (frameId) { window.cancelAnimationFrame(frameId); frameId = 0; } }, { threshold: 0 });
+    visibilityObserver.observe(networkHero);
+    const pause = () => { paused = document.hidden || root.classList.contains('reduce-motion'); if (paused && frameId) { window.cancelAnimationFrame(frameId); frameId = 0; } else schedule(); };
+    window.addEventListener('resize', resize); document.addEventListener('visibilitychange', pause); document.addEventListener('nexulvi:motion-change', pause);
+    window.addEventListener('pointermove', (event) => { const rect = networkHero.getBoundingClientRect(); mouseX = (event.clientX - rect.left - rect.width / 2) / rect.width; mouseY = (event.clientY - rect.top - rect.height / 2) / rect.height; }, { passive: true });
+    window.addEventListener('scroll', () => { scrollEnergy = Math.min(1, Math.abs(window.scrollY - lastScroll) / 35); lastScroll = window.scrollY; }, { passive: true });
+    resize(); if (fxStatus) fxStatus.querySelector('span').textContent = 'NEXULVI FX // CANVAS + S3D'; schedule();
   }
   initNetworkCanvas();
 })();
