@@ -29,6 +29,8 @@
   const stereoToggle = document.querySelector('#stereo-toggle');
   const hero = document.querySelector('.hero');
   const systemReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const saveData = Boolean(navigator.connection && navigator.connection.saveData);
+  const capableDevice = !saveData && !systemReducedMotion && matchMedia('(min-width: 851px)').matches && (navigator.hardwareConcurrency || 4) >= 4;
   function setStereo(enabled) {
     hero.classList.toggle('stereo-mode', enabled);
     stereoToggle.setAttribute('aria-pressed', String(enabled));
@@ -44,10 +46,11 @@
     if (!systemReducedMotion) storage.set('nexulvi-motion-v3', reduced ? 'reduced' : 'full');
     document.dispatchEvent(new CustomEvent('nexulvi:motion-change', { detail: { reduced } }));
   }
-  setMotionReduction(storage.get('nexulvi-motion-v3') === 'reduced' || systemReducedMotion);
+  setMotionReduction(storage.get('nexulvi-motion-v3') === 'reduced' || systemReducedMotion || saveData);
   motionToggle.addEventListener('click', () => setMotionReduction(!root.classList.contains('reduce-motion')));
   const stereoDefault = storage.get('nexulvi-stereo-v3', 'on') !== 'off';
   setStereo(stereoDefault);
+  if (!capableDevice) { setStereo(false); stereoToggle.hidden = true; }
   stereoToggle.addEventListener('click', () => { if (!root.classList.contains('reduce-motion')) setStereo(!hero.classList.contains('stereo-mode')); });
   themeToggle.addEventListener('click', () => runViewTransition(() => setTheme(root.dataset.theme === 'light' ? 'dark' : 'light')));
   languageSelect.addEventListener('change', (event) => runViewTransition(() => setLanguage(event.target.value)));
@@ -108,7 +111,7 @@
   }
   window.addEventListener('scroll', () => { if (!ticking) { window.requestAnimationFrame(updateScrollEffects); ticking = true; } }, { passive: true });
   updateScrollEffects();
-  const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const canHover = !saveData && matchMedia('(hover: hover) and (pointer: fine)').matches;
   if (canHover) {
     const cursorSystem = document.querySelector('.cursor-system');
     const cursorCore = document.querySelector('.cursor-core');
@@ -171,11 +174,11 @@
     const isTouch = matchMedia('(hover: none)').matches;
     function resize() {
       const bounds = networkHero.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, isTouch ? 1.5 : 2);
+       const dpr = Math.min(window.devicePixelRatio || 1, isTouch ? 1.25 : 1.5);
       width = bounds.width; height = bounds.height;
       canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr);
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const count = Math.max(isTouch ? 36 : 70, Math.min(isTouch ? 72 : 150, Math.floor(width * height / (isTouch ? 16000 : 9000))));
+       const count = Math.max(isTouch ? 28 : 46, Math.min(isTouch ? 48 : 82, Math.floor(width * height / (isTouch ? 21000 : 15000))));
       particles = Array.from({ length: count }, () => ({ x: Math.random() * width, y: Math.random() * height, z: .25 + Math.random() * .9, vx: (Math.random() - .5) * .18, vy: (Math.random() - .5) * .18, size: .5 + Math.random() * 1.8 }));
       centerGradient = null; gradientRadius = 0;
     }
@@ -211,4 +214,5 @@
     resize(); if (fxStatus) fxStatus.querySelector('span').textContent = 'NEXULVI FX // CANVAS + S3D'; schedule();
   }
   initNetworkCanvas();
+  if (capableDevice) import('./stereo-scene.js').catch(() => { if (fxStatus) fxStatus.querySelector('span').textContent = 'NEXULVI FX // CSS MODE'; });
 })();
