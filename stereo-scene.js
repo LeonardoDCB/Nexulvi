@@ -64,11 +64,17 @@ if (canvas && hero && visual) {
     let frameId = 0;
     let visible = true;
     let enabled = hero.classList.contains('stereo-mode');
+    let bufferWidth = 1;
+    let bufferHeight = 1;
+    let hasRendered = false;
     const resize = () => {
       const bounds = visual.getBoundingClientRect();
       width = Math.max(bounds.width, 1);
       height = Math.max(bounds.height, 1);
       renderer.setSize(width, height, false);
+      const drawingBuffer = renderer.getDrawingBufferSize(new THREE.Vector2());
+      bufferWidth = drawingBuffer.x;
+      bufferHeight = drawingBuffer.y;
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
     };
@@ -89,23 +95,27 @@ if (canvas && hero && visual) {
       });
 
       renderer.setScissorTest(true);
-      renderer.setScissor(0, 0, width / 2, height);
-      renderer.setViewport(0, 0, width / 2, height);
+      renderer.setScissor(0, 0, bufferWidth / 2, bufferHeight);
+      renderer.setViewport(0, 0, bufferWidth / 2, bufferHeight);
       renderer.clear();
       stereoCamera.update(camera);
       renderer.render(scene, stereoCamera.cameraL);
-      renderer.setScissor(width / 2, 0, width / 2, height);
-      renderer.setViewport(width / 2, 0, width / 2, height);
+      renderer.setScissor(bufferWidth / 2, 0, bufferWidth / 2, bufferHeight);
+      renderer.setViewport(bufferWidth / 2, 0, bufferWidth / 2, bufferHeight);
       renderer.render(scene, stereoCamera.cameraR);
       renderer.setScissorTest(false);
+      if (!hasRendered) {
+        hasRendered = true;
+        hero.classList.add('webgl-ready');
+      }
       frameId = 0;
       if (enabled && visible && !document.hidden && !reducedMotion) frameId = window.requestAnimationFrame(render);
     };
     const schedule = () => { if (!frameId && enabled && visible && !document.hidden && !reducedMotion) frameId = window.requestAnimationFrame(render); };
     const setEnabled = (nextEnabled) => {
       enabled = nextEnabled;
-      hero.classList.toggle('webgl-ready', enabled);
       if (!enabled && frameId) { window.cancelAnimationFrame(frameId); frameId = 0; }
+      if (!enabled) { hasRendered = false; hero.classList.remove('webgl-ready'); }
       if (enabled) { report('NEXULVI FX // WEBGL STEREO ACTIVE', true); schedule(); }
       else report('NEXULVI FX // CSS FALLBACK');
     };

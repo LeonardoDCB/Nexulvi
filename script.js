@@ -81,7 +81,7 @@
   const loader = document.querySelector('#site-loader');
   const loaderPercent = document.querySelector('.loader-percent');
   let loaderValue = 0;
-  const loaderTimer = window.setInterval(() => { loaderValue = Math.min(loaderValue + Math.ceil(Math.random() * 17), 100); loaderPercent.textContent = `${String(loaderValue).padStart(2, '0')}%`; if (loaderValue >= 100) { window.clearInterval(loaderTimer); window.setTimeout(() => loader.classList.add('is-hidden'), 180); } }, 90);
+  const loaderTimer = window.setInterval(() => { loaderValue = Math.min(loaderValue + Math.ceil(Math.random() * 22), 100); loaderPercent.textContent = `${String(loaderValue).padStart(2, '0')}%`; if (loaderValue >= 100) { window.clearInterval(loaderTimer); window.setTimeout(() => loader.classList.add('is-hidden'), 100); } }, 45);
   let ticking = false;
   function updateScrollEffects() {
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;

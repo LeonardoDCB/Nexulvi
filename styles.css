@@ -110,3 +110,9 @@ p,.hero-description,.section-note,.large-copy,.support-copy>p:not(.eyebrow),.car
 .hero:not(.stereo-mode) .stereo-canvas,.reduce-motion .stereo-canvas{visibility:hidden}
 @media(max-width:850px){.stereo-toggle{display:block;min-width:44px;min-height:44px}}
 @media(prefers-reduced-motion:reduce){.stereo-canvas{display:none}.network-canvas{display:none!important}}
+
+/* Keep the visual fallback visible until WebGL has produced a real frame. */
+.network-canvas{z-index:0}
+.cursor-glow{z-index:5;will-change:left,top}
+.hero.webgl-ready .core-orb,.hero.webgl-ready .node,.hero.webgl-ready .connection-lines,.hero.webgl-ready .visual-label{opacity:.24}
+.noise{opacity:.022}
