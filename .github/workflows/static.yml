@@ -33,11 +33,18 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Validate JavaScript
+        run: |
+          node --check script.js
+          node --check apps.js
+          node --check stereo-scene.js
+          node --check servidor-local.js
+      - name: Build public artifact
+        run: node scripts/build.js
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          path: 'dist'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5

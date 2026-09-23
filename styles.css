@@ -107,6 +107,8 @@ p,.hero-description,.section-note,.large-copy,.support-copy>p:not(.eyebrow),.car
 
 /* Performance and device-safe states. */
 [hidden]{display:none!important}
+html:not(.js-ready) .site-loader{display:none}
+html:not(.js-ready) .site-loader{display:none}
 .hero:not(.stereo-mode) .stereo-canvas,.reduce-motion .stereo-canvas{visibility:hidden}
 @media(max-width:850px){.stereo-toggle{display:block;min-width:44px;min-height:44px}}
 @media(prefers-reduced-motion:reduce){.stereo-canvas{display:none}.network-canvas{display:none!important}}

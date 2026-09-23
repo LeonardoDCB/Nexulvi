@@ -16,7 +16,19 @@ const types = {
 };
 
 http.createServer((request, response) => {
-  const requested = decodeURIComponent(request.url.split('?')[0]);
+  if (!['GET', 'HEAD'].includes(request.method)) {
+    response.writeHead(405, { 'Allow': 'GET, HEAD', 'Content-Type': 'text/plain; charset=utf-8' });
+    response.end('Method not allowed');
+    return;
+  }
+  let requested;
+  try {
+    requested = decodeURIComponent(request.url.split('?')[0]);
+  } catch {
+    response.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+    response.end('Bad request');
+    return;
+  }
   const relative = requested === '/' ? '/index.html' : requested;
   const file = path.resolve(root, `.${relative}`);
 
@@ -29,9 +41,13 @@ http.createServer((request, response) => {
 
   response.writeHead(200, {
     'Content-Type': types[path.extname(file).toLowerCase()] || 'application/octet-stream',
-    'Cache-Control': 'no-store'
+    'Cache-Control': 'no-store',
+    'X-Content-Type-Options': 'nosniff',
+    'Referrer-Policy': 'no-referrer',
+    'Cross-Origin-Resource-Policy': 'same-origin'
   });
-  fs.createReadStream(file).pipe(response);
+  if (request.method === 'HEAD') { response.end(); return; }
+  fs.createReadStream(file).on('error', () => response.destroy()).pipe(response);
 }).listen(port, '127.0.0.1', () => {
   console.log(`Nexulvi aberto em http://127.0.0.1:${port}`);
 });
