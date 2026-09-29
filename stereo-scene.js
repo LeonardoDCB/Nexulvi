@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from './assets/vendor/three.module.js';
 
 const canvas = document.querySelector('#stereo-canvas');
 const hero = document.querySelector('.hero');

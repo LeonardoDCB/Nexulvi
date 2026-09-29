@@ -7,8 +7,9 @@ const root = path.resolve(__dirname, '..');
 const output = path.join(root, 'dist');
 const publicFiles = [
   '404.html', 'alongae.html', 'apps.css', 'apps.js', 'arqvello.html', 'coflira.html',
-  'favicon.svg', 'index.html', 'privacidade-alongae.html', 'robots.txt', 'script.js',
-  'site.webmanifest', 'sitemap.xml', 'stereo-scene.js', 'styles.css'
+  'favicon.svg', 'index.html', 'miauforia.html', 'privacidade-alongae.html',
+  'privacidade-miauforia.html', 'privacidade-sentinela.html', 'robots.txt', 'script.js',
+  'sentinela.html', 'site.webmanifest', 'sitemap.xml', 'stereo-scene.js', 'styles.css'
 ];
 
 fs.rmSync(output, { recursive: true, force: true });
@@ -20,8 +21,6 @@ for (const file of publicFiles) {
   fs.copyFileSync(source, path.join(output, file));
 }
 
-for (const file of fs.readdirSync(path.join(root, 'assets'))) {
-  fs.copyFileSync(path.join(root, 'assets', file), path.join(output, 'assets', file));
-}
+fs.cpSync(path.join(root, 'assets'), path.join(output, 'assets'), { recursive: true });
 
 console.log(`Build concluído em ${output}`);
