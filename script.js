@@ -1,218 +1,193 @@
-(function () {
+(() => {
   'use strict';
+
   const root = document.documentElement;
-  const storage = { get(key, fallback = null) { try { return window.localStorage.getItem(key) || fallback; } catch (error) { return fallback; } }, set(key, value) { try { window.localStorage.setItem(key, value); } catch (error) {} } };
-  root.classList.add('js-ready');
-  const fxStatus = document.querySelector('#fx-status');
-  if (fxStatus) { fxStatus.classList.add('is-ready'); fxStatus.querySelector('span').textContent = 'NEXULVI FX ONLINE'; }
-  window.addEventListener('error', (event) => { if (fxStatus) fxStatus.querySelector('span').textContent = `FX ERROR // ${event.message || 'SCRIPT'}`; });
-  const themeToggle = document.querySelector('#theme-toggle');
   const languageSelect = document.querySelector('#language-select');
+  const themeToggle = document.querySelector('#theme-toggle');
   const menuToggle = document.querySelector('#menu-toggle');
   const mobileNav = document.querySelector('#mobile-nav');
-  const translations = {
-    pt: { skip:'Pular para o conteúdo', navSolutions:'Soluções', navManifesto:'Manifesto', navSupport:'Apoie', eyebrow:'ESTÚDIO DIGITAL INDEPENDENTE', heroLineOne:'Conectando', heroLineTwo:'ideias ao futuro.', heroDescription:'A Nexulvi cria aplicativos e experiências digitais que transformam possibilidades em algo real, simples e útil.', explore:'Explorar soluções', discover:'Descobrir a Nexulvi', manifestoEyebrow:'NOSSO MANIFESTO', manifestoTitle:'O próximo passo começa<br><em>com uma ideia.</em>', manifestoCopy:'Nexulvi combina curiosidade, design e tecnologia para criar ferramentas que acompanham a vida real. Não criamos por criar. Cada solução nasce para aproximar pessoas de possibilidades que antes pareciam distantes.', statOne:'visão conectada', statTwo:'possibilidades', statThree:'em movimento', solutionsEyebrow:'O QUE ESTAMOS CRIANDO', solutionsTitle:'Soluções para<br><em>o agora.</em>', solutionsNote:'Uma coleção crescente de aplicativos pensados para tornar o digital mais humano, acessível e interessante.', comingSoon:'EM BREVE', future:'FUTURO', categoryOne:'PRODUTIVIDADE', categoryTwo:'EXPERIÊNCIAS DIGITAIS', categoryThree:'LABORATÓRIO', appOne:'Nova solução em desenvolvimento', appOneDescription:'Uma nova forma de organizar suas ideias e transformar intenção em ação.', appTwo:'Próxima conexão', appTwoDescription:'Tecnologia discreta para ajudar você a viver melhor o seu tempo.', appThree:'Ideias em movimento', appThreeDescription:'Experimentos que podem se tornar a próxima grande solução da Nexulvi.', followLaunch:'Acompanhar lançamento', learnMore:'Saiba mais', followJourney:'Seguir a jornada', signalEyebrow:'NOSSO SINAL', signalTitle:'Feito para quem<br><em>pensa adiante.</em>', signalCopy:'A tecnologia muda rápido. Nossa curiosidade, mais rápido ainda. Acompanhe o que vem a seguir.', supportEyebrow:'FAÇA PARTE', supportTitle:'Ajude a próxima<br><em>ideia a decolar.</em>', supportCopy:'A Nexulvi está apenas começando. Seu apoio ajuda a manter os projetos independentes vivos, acessíveis e em constante evolução.', supportButton:'Quero apoiar o projeto', qrLabel:'QR CODE // APOIE', qrNote:'Link de apoio em breve', footerTagline:'Conectando ideias ao futuro.', backTop:'Voltar ao topo ↑', rights:'Todos os direitos reservados.', status:'Sistemas online', madeWith:'Feito com curiosidade e código.' },
-    en: { skip:'Skip to content', navSolutions:'Solutions', navManifesto:'Manifesto', navSupport:'Support', eyebrow:'INDEPENDENT DIGITAL STUDIO', heroLineOne:'Connecting', heroLineTwo:'ideas to the future.', heroDescription:'Nexulvi creates apps and digital experiences that turn possibilities into something real, simple and useful.', explore:'Explore solutions', discover:'Discover Nexulvi', manifestoEyebrow:'OUR MANIFESTO', manifestoTitle:'The next step starts<br><em>with an idea.</em>', manifestoCopy:'Nexulvi combines curiosity, design and technology to create tools that fit real life. We do not create just to create. Every solution brings people closer to possibilities that once felt distant.', statOne:'connected vision', statTwo:'possibilities', statThree:'in motion', solutionsEyebrow:'WHAT WE ARE CREATING', solutionsTitle:'Solutions for<br><em>right now.</em>', solutionsNote:'A growing collection of apps designed to make digital life more human, accessible and interesting.', comingSoon:'COMING SOON', future:'FUTURE', categoryOne:'PRODUCTIVITY', categoryTwo:'DIGITAL EXPERIENCES', categoryThree:'LABORATORY', appOne:'New solution in development', appOneDescription:'A new way to organize your ideas and turn intention into action.', appTwo:'The next connection', appTwoDescription:'Quiet technology to help you make better use of your time.', appThree:'Ideas in motion', appThreeDescription:'Experiments that may become Nexulvi’s next great solution.', followLaunch:'Follow the launch', learnMore:'Learn more', followJourney:'Follow the journey', signalEyebrow:'OUR SIGNAL', signalTitle:'Made for those<br><em>who think ahead.</em>', signalCopy:'Technology changes fast. Our curiosity changes faster. Follow what comes next.', supportEyebrow:'BE PART OF IT', supportTitle:'Help the next<br><em>idea take off.</em>', supportCopy:'Nexulvi is just getting started. Your support helps keep independent projects alive, accessible and evolving.', supportButton:'Support the project', qrLabel:'QR CODE // SUPPORT', qrNote:'Support link coming soon', footerTagline:'Connecting ideas to the future.', backTop:'Back to top ↑', rights:'All rights reserved.', status:'Systems online', madeWith:'Made with curiosity and code.' },
-    es: { skip:'Saltar al contenido', navSolutions:'Soluciones', navManifesto:'Manifiesto', navSupport:'Apoyar', eyebrow:'ESTUDIO DIGITAL INDEPENDIENTE', heroLineOne:'Conectando', heroLineTwo:'ideas al futuro.', heroDescription:'Nexulvi crea aplicaciones y experiencias digitales que convierten posibilidades en algo real, simple y útil.', explore:'Explorar soluciones', discover:'Descubrir Nexulvi', manifestoEyebrow:'NUESTRO MANIFIESTO', manifestoTitle:'El siguiente paso empieza<br><em>con una idea.</em>', manifestoCopy:'Nexulvi combina curiosidad, diseño y tecnología para crear herramientas que acompañan la vida real.', statOne:'visión conectada', statTwo:'posibilidades', statThree:'en movimiento', solutionsEyebrow:'LO QUE ESTAMOS CREANDO', solutionsTitle:'Soluciones para<br><em>el presente.</em>', solutionsNote:'Una colección creciente de aplicaciones pensadas para hacer lo digital más humano, accesible e interesante.', comingSoon:'PRÓXIMAMENTE', future:'FUTURO', categoryOne:'PRODUCTIVIDAD', categoryTwo:'EXPERIENCIAS DIGITALES', categoryThree:'LABORATORIO', appOne:'Nueva solución en desarrollo', appOneDescription:'Una nueva forma de organizar tus ideas y convertir la intención en acción.', appTwo:'La próxima conexión', appTwoDescription:'Tecnología discreta para ayudarte a aprovechar mejor tu tiempo.', appThree:'Ideas en movimiento', appThreeDescription:'Experimentos que pueden convertirse en la próxima solución de Nexulvi.', followLaunch:'Seguir lanzamiento', learnMore:'Saber más', followJourney:'Seguir el camino', signalEyebrow:'NUESTRA SEÑAL', signalTitle:'Hecho para quienes<br><em>piensan adelante.</em>', signalCopy:'La tecnología cambia rápido. Nuestra curiosidad, aún más rápido.', supportEyebrow:'SÉ PARTE', supportTitle:'Ayuda a que la próxima<br><em>idea despegue.</em>', supportCopy:'Nexulvi acaba de comenzar. Tu apoyo ayuda a mantener proyectos independientes vivos y en evolución.', supportButton:'Apoyar el proyecto', qrLabel:'CÓDIGO QR // APOYAR', qrNote:'Enlace de apoyo próximamente', footerTagline:'Conectando ideas al futuro.', backTop:'Volver arriba ↑', rights:'Todos los derechos reservados.', status:'Sistemas online', madeWith:'Hecho con curiosidad y código.' },
-    fr: { skip:'Aller au contenu', navSolutions:'Solutions', navManifesto:'Manifeste', navSupport:'Soutenir', eyebrow:'STUDIO NUMÉRIQUE INDÉPENDANT', heroLineOne:'Connecter', heroLineTwo:'les idées au futur.', heroDescription:'Nexulvi crée des applications et expériences numériques qui transforment les possibilités en quelque chose de réel, simple et utile.', explore:'Explorer les solutions', discover:'Découvrir Nexulvi', manifestoEyebrow:'NOTRE MANIFESTE', manifestoTitle:'La prochaine étape commence<br><em>par une idée.</em>', manifestoCopy:'Nexulvi associe curiosité, design et technologie pour créer des outils adaptés à la vie réelle.', statOne:'vision connectée', statTwo:'possibilités', statThree:'en mouvement', solutionsEyebrow:'CE QUE NOUS CRÉONS', solutionsTitle:'Des solutions pour<br><em>aujourd’hui.</em>', solutionsNote:'Une collection croissante d’applications conçues pour rendre le numérique plus humain, accessible et intéressant.', comingSoon:'BIENTÔT', future:'FUTUR', categoryOne:'PRODUCTIVITÉ', categoryTwo:'EXPÉRIENCES NUMÉRIQUES', categoryThree:'LABORATOIRE', appOne:'Nouvelle solution en développement', appOneDescription:'Une nouvelle façon d’organiser vos idées et de transformer l’intention en action.', appTwo:'La prochaine connexion', appTwoDescription:'Une technologie discrète pour mieux profiter de votre temps.', appThree:'Des idées en mouvement', appThreeDescription:'Des expériences qui pourraient devenir la prochaine solution Nexulvi.', followLaunch:'Suivre le lancement', learnMore:'En savoir plus', followJourney:'Suivre le parcours', signalEyebrow:'NOTRE SIGNAL', signalTitle:'Pensé pour ceux<br><em>qui vont de l’avant.</em>', signalCopy:'La technologie évolue vite. Notre curiosité encore plus vite.', supportEyebrow:'REJOIGNEZ-NOUS', supportTitle:'Aidez la prochaine<br><em>idée à décoller.</em>', supportCopy:'Nexulvi ne fait que commencer. Votre soutien aide les projets indépendants à rester vivants et accessibles.', supportButton:'Soutenir le projet', qrLabel:'CODE QR // SOUTENIR', qrNote:'Lien bientôt disponible', footerTagline:'Connecter les idées au futur.', backTop:'Retour en haut ↑', rights:'Tous droits réservés.', status:'Systèmes en ligne', madeWith:'Fait avec curiosité et du code.' },
-    de: { skip:'Zum Inhalt springen', navSolutions:'Lösungen', navManifesto:'Manifest', navSupport:'Unterstützen', eyebrow:'UNABHÄNGIGES DIGITALES STUDIO', heroLineOne:'Ideen', heroLineTwo:'mit der Zukunft verbinden.', heroDescription:'Nexulvi entwickelt Apps und digitale Erlebnisse, die Möglichkeiten in etwas Reales, Einfaches und Nützliches verwandeln.', explore:'Lösungen entdecken', discover:'Nexulvi entdecken', manifestoEyebrow:'UNSER MANIFEST', manifestoTitle:'Der nächste Schritt beginnt<br><em>mit einer Idee.</em>', manifestoCopy:'Nexulvi verbindet Neugier, Design und Technologie, um Werkzeuge für das echte Leben zu schaffen.', statOne:'verbundene Vision', statTwo:'Möglichkeiten', statThree:'in Bewegung', solutionsEyebrow:'WAS WIR ENTWICKELN', solutionsTitle:'Lösungen für<br><em>das Jetzt.</em>', solutionsNote:'Eine wachsende Sammlung von Apps, die das Digitale menschlicher, zugänglicher und spannender machen.', comingSoon:'BALD VERFÜGBAR', future:'ZUKUNFT', categoryOne:'PRODUKTIVITÄT', categoryTwo:'DIGITALE ERLEBNISSE', categoryThree:'LABOR', appOne:'Neue Lösung in Entwicklung', appOneDescription:'Eine neue Art, Ideen zu organisieren und Absichten in Taten zu verwandeln.', appTwo:'Die nächste Verbindung', appTwoDescription:'Unaufdringliche Technologie für eine bessere Nutzung deiner Zeit.', appThree:'Ideen in Bewegung', appThreeDescription:'Experimente, die Nexulvis nächste große Lösung werden können.', followLaunch:'Start verfolgen', learnMore:'Mehr erfahren', followJourney:'Reise verfolgen', signalEyebrow:'UNSER SIGNAL', signalTitle:'Für alle, die<br><em>weiter denken.</em>', signalCopy:'Technologie verändert sich schnell. Unsere Neugier noch schneller.', supportEyebrow:'SEI DABEI', supportTitle:'Hilf der nächsten<br><em>Idee beim Start.</em>', supportCopy:'Nexulvi steht erst am Anfang. Deine Unterstützung hält unabhängige Projekte lebendig und in Bewegung.', supportButton:'Projekt unterstützen', qrLabel:'QR-CODE // SUPPORT', qrNote:'Support-Link folgt bald', footerTagline:'Ideen mit der Zukunft verbinden.', backTop:'Nach oben ↑', rights:'Alle Rechte vorbehalten.', status:'Systeme online', madeWith:'Mit Neugier und Code gemacht.' }
+  const languageStatus = document.querySelector('#language-status');
+  const storage = {
+    get(key) {
+      try { return localStorage.getItem(key); } catch { return null; }
+    },
+    set(key, value) {
+      try { localStorage.setItem(key, value); } catch { /* Storage can be unavailable in private contexts. */ }
+    }
   };
-  Object.assign(translations.pt, {
-    eyebrow:'ESTÚDIO DE PRODUTO DIGITAL', heroLineOne:'Tecnologia que', heroLineTwo:'ganha vida.', heroDescription:'Criamos produtos digitais, interfaces e experiências que transformam ideias ambiciosas em algo real, desejável e pronto para crescer.', explore:'Ver o que fazemos', discover:'Conhecer a Nexulvi', manifestoEyebrow:'A NOSSA FREQUÊNCIA', manifestoTitle:'Ideias fortes merecem<br><em>uma forma memorável.</em>', manifestoCopy:'Na Nexulvi, estratégia, design e engenharia trabalham no mesmo circuito. Descobrimos o que importa, desenhamos a experiência e construímos a tecnologia para que a sua ideia não apenas funcione: ela seja lembrada.', statOne:'visão conectada', statTwo:'curiosidade ativa', statThree:'espaço para crescer', solutionsEyebrow:'SISTEMAS EM ÓRBITA', solutionsTitle:'Produtos que deixam<br><em>o futuro tangível.</em>', solutionsNote:'Da primeira hipótese ao produto que ganha escala: experiências digitais com clareza, personalidade e tecnologia de verdade.', comingSoon:'EM BREVE', future:'LAB ONLINE', categoryOne:'ESTRATÉGIA DIGITAL', categoryTwo:'PRODUTO DIGITAL', categoryThree:'LABORATÓRIO', appOne:'Core / Produto com presença', appOneDescription:'Arquitetura de marca e experiência para transformar uma visão complexa em uma jornada impossível de ignorar.', appTwo:'Interface / Clareza em movimento', appTwoDescription:'Fluxos, telas e interações que fazem tecnologia avançada parecer natural desde o primeiro toque.', appThree:'Lab / O próximo comportamento', appThreeDescription:'Protótipos e experimentos para descobrir o que a tecnologia pode fazer antes que vire tendência.', followLaunch:'Levar uma ideia adiante', learnMore:'Abrir conversa', followJourney:'Entrar no laboratório', signalEyebrow:'SINAL NEXULVI', signalTitle:'Não seguimos<br><em>o ruído.</em>', signalCopy:'Encontramos a frequência certa entre a ousadia de uma ideia e a precisão necessária para colocá-la no mundo.', supportEyebrow:'ABRA UM CANAL', supportTitle:'Sua próxima grande ideia<br><em>começa aqui.</em>', supportCopy:'Tem um produto para tirar do papel, uma experiência para reinventar ou uma marca pronta para subir de nível? Vamos construir o próximo sinal.', supportButton:'Transmitir meu projeto', qrLabel:'CHANNEL // OPEN', qrNote:'Resposta em breve'
-  });
-  function setLanguage(lang) { const dict = translations[lang] || translations.pt; document.documentElement.lang = lang === 'pt' ? 'pt-BR' : lang; document.querySelectorAll('[data-i18n]').forEach((el) => { if (dict[el.dataset.i18n]) el.innerHTML = dict[el.dataset.i18n]; }); const status = document.querySelector('#language-status'); if (status) status.textContent = `Idioma alterado para ${({ pt: 'Português', en: 'English', es: 'Español', fr: 'Français', de: 'Deutsch' }[lang] || 'Português')}`; storage.set('nexulvi-language', lang); }
-  function setTheme(theme) { root.dataset.theme = theme; themeToggle.setAttribute('aria-pressed', theme === 'light'); themeToggle.setAttribute('aria-label', theme === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'); const themeColor = document.querySelector('meta[name="theme-color"]'); if (themeColor) themeColor.setAttribute('content', theme === 'light' ? '#f3f8f7' : '#071018'); storage.set('nexulvi-theme', theme); }
-  const savedTheme = storage.get('nexulvi-theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-  const savedLanguage = storage.get('nexulvi-language') || 'pt'; languageSelect.value = savedLanguage; setLanguage(savedLanguage); setTheme(savedTheme);
-  function runViewTransition(update) { if (document.startViewTransition && !root.classList.contains('reduce-motion')) document.startViewTransition(update); else update(); }
-  const motionToggle = document.querySelector('#motion-toggle');
-  const stereoToggle = document.querySelector('#stereo-toggle');
-  const hero = document.querySelector('.hero');
-  const systemReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const saveData = Boolean(navigator.connection && navigator.connection.saveData);
-  const capableDevice = !saveData && !systemReducedMotion && matchMedia('(min-width: 851px)').matches && (navigator.hardwareConcurrency || 4) >= 4;
-  function setStereo(enabled) {
-    hero.classList.toggle('stereo-mode', enabled);
-    stereoToggle.setAttribute('aria-pressed', String(enabled));
-    stereoToggle.setAttribute('aria-label', enabled ? 'Desativar modo estéreo' : 'Ativar modo estéreo');
-    if (fxStatus) fxStatus.querySelector('span').textContent = enabled ? 'NEXULVI FX // S3D ACTIVE' : 'NEXULVI FX ONLINE';
-    storage.set('nexulvi-stereo-v3', enabled ? 'on' : 'off');
-    document.dispatchEvent(new CustomEvent('nexulvi:stereo-change', { detail: { enabled } }));
+
+  const translations = {
+    pt: {
+      skip: 'Pular para o conteúdo', language: 'Idioma', navProducts: 'Aplicativos', navAbout: 'Sobre nós', navContact: 'Contato',
+      heroEyebrow: 'ESTÚDIO INDEPENDENTE DE PRODUTOS DIGITAIS', heroTitle: 'Tecnologia útil.<br><em>Feita para a vida real.</em>',
+      heroDescription: 'Criamos aplicativos que ajudam as pessoas a cuidar do seu tempo, organizar o que importa e fazer escolhas com mais clareza.',
+      heroCta: 'Conheça nossos aplicativos', heroSecondary: 'Quem é a Nexulvi', heroNote: 'Ideias independentes. Produtos em construção.', scroll: 'ROLE PARA EXPLORAR',
+      stripTitle: 'Tecnologia com propósito. Experiências sem excesso.', productsEyebrow: 'NOSSO PORTFÓLIO', productsTitle: 'Aplicativos para<br><em>o que importa.</em>',
+      productsIntro: 'Cada produto parte de uma necessidade concreta. Conheça as ideias que estamos transformando em ferramentas para o dia a dia.',
+      statusSoon: 'EM BREVE', statusPreparing: 'EM PREPARAÇÃO', statusDeveloping: 'EM DESENVOLVIMENTO', learnProduct: 'Conheça o aplicativo',
+      alongaeScreen: 'Hora de<br>respirar.', alongaeCategory: 'BEM-ESTAR E ERGONOMIA', alongaeDescription: 'Pausas guiadas e lembretes gentis para criar uma rotina mais saudável diante da tela.',
+      archiveKicker: 'ARQUIVO PESSOAL', archiveTitle: 'Tudo no<br>seu lugar.', fileOne: 'Conta de energia', fileTwo: 'Documento pessoal',
+      arqvelloCategory: 'ARQUIVO DIGITAL', arqvelloDescription: 'Digitalize, organize e encontre documentos importantes com privacidade e controle local.',
+      financeKicker: 'RESUMO DO MÊS', financeCaption: 'disponível para planejar', cofliraCategory: 'FINANÇAS PESSOAIS',
+      cofliraDescription: 'Receitas, despesas e metas organizadas para ajudar você a decidir com mais tranquilidade.',
+      miauforiaCategory: 'ENTRETENIMENTO FELINO', miauforiaDescription: 'Brincadeiras interativas para estimular a curiosidade e o bem-estar dos gatos.',
+      sentinelaKicker: 'ANÁLISE LOCAL', sentinelaScreen: 'Observe.<br>Entenda.', sentinelaCategory: 'INVESTIGAÇÃO DIGITAL',
+      sentinelaDescription: 'Leituras técnicas locais para entender situações incomuns e investigar com responsabilidade.',
+      aboutEyebrow: 'SOBRE A NEXULVI', aboutTitle: 'Um estúdio independente.<br><em>Produtos com intenção.</em>',
+      aboutDescription: 'A Nexulvi é uma empresa de produtos digitais. Unimos estratégia, design e engenharia para transformar ideias em aplicativos úteis, claros e agradáveis de usar.',
+      talkToUs: 'Vamos conversar', principleOneTitle: 'Utilidade primeiro', principleOneText: 'Cada função precisa resolver uma necessidade real.',
+      principleTwoTitle: 'Privacidade por padrão', principleTwoText: 'Transparência e cuidado desde o início do produto.',
+      principleThreeTitle: 'Tecnologia com clareza', principleThreeText: 'Experiências simples, mesmo quando a tecnologia é complexa.',
+      contactEyebrow: 'FALE COM A NEXULVI', contactTitle: 'Tem uma ideia?<br><em>Vamos conversar.</em>',
+      contactDescription: 'Dúvidas, sugestões ou interesse em acompanhar nossos produtos? Estamos por aqui.', contactCta: 'Enviar um e-mail',
+      footerTagline: 'Produtos digitais independentes para a vida real.', backTop: 'Voltar ao topo ↑', rights: 'Todos os direitos reservados.'
+    },
+    en: {
+      skip: 'Skip to content', language: 'Language', navProducts: 'Apps', navAbout: 'About us', navContact: 'Contact',
+      heroEyebrow: 'INDEPENDENT DIGITAL PRODUCT STUDIO', heroTitle: 'Useful technology.<br><em>Made for real life.</em>',
+      heroDescription: 'We create apps that help people make time for what matters, stay organized and make clearer choices.',
+      heroCta: 'Explore our apps', heroSecondary: 'Meet Nexulvi', heroNote: 'Independent ideas. Products in progress.', scroll: 'SCROLL TO EXPLORE',
+      stripTitle: 'Technology with purpose. Experiences without excess.', productsEyebrow: 'OUR PORTFOLIO', productsTitle: 'Apps for<br><em>what matters.</em>',
+      productsIntro: 'Every product starts with a real need. Meet the ideas we are turning into useful tools for everyday life.',
+      statusSoon: 'COMING SOON', statusPreparing: 'IN PREPARATION', statusDeveloping: 'IN DEVELOPMENT', learnProduct: 'Explore the app',
+      alongaeScreen: 'Time to<br>breathe.', alongaeCategory: 'WELLNESS AND ERGONOMICS', alongaeDescription: 'Guided breaks and gentle reminders for a healthier routine at your screen.',
+      archiveKicker: 'PERSONAL ARCHIVE', archiveTitle: 'Everything<br>in its place.', fileOne: 'Electricity bill', fileTwo: 'Personal document',
+      arqvelloCategory: 'DIGITAL ARCHIVE', arqvelloDescription: 'Scan, organize and find important documents with privacy and local control.',
+      financeKicker: 'MONTHLY OVERVIEW', financeCaption: 'available to plan', cofliraCategory: 'PERSONAL FINANCE',
+      cofliraDescription: 'Organized income, expenses and goals to help you make more confident decisions.',
+      miauforiaCategory: 'CAT ENTERTAINMENT', miauforiaDescription: 'Interactive play to spark curiosity and support cats’ wellbeing.',
+      sentinelaKicker: 'LOCAL ANALYSIS', sentinelaScreen: 'Observe.<br>Understand.', sentinelaCategory: 'DIGITAL INVESTIGATION',
+      sentinelaDescription: 'Local technical readings to understand unusual situations and investigate responsibly.',
+      aboutEyebrow: 'ABOUT NEXULVI', aboutTitle: 'An independent studio.<br><em>Products with purpose.</em>',
+      aboutDescription: 'Nexulvi is a digital product company. We bring strategy, design and engineering together to turn ideas into useful, clear and enjoyable apps.',
+      talkToUs: 'Let’s talk', principleOneTitle: 'Useful by design', principleOneText: 'Every feature should solve a real need.',
+      principleTwoTitle: 'Privacy by default', principleTwoText: 'Transparency and care from the very start.',
+      principleThreeTitle: 'Technology made clear', principleThreeText: 'Simple experiences, even when technology is complex.',
+      contactEyebrow: 'GET IN TOUCH', contactTitle: 'Have an idea?<br><em>Let’s talk.</em>',
+      contactDescription: 'Questions, suggestions or want to follow our apps? We would love to hear from you.', contactCta: 'Send an email',
+      footerTagline: 'Independent digital products for real life.', backTop: 'Back to top ↑', rights: 'All rights reserved.'
+    },
+    es: {
+      skip: 'Saltar al contenido', language: 'Idioma', navProducts: 'Aplicaciones', navAbout: 'Sobre nosotros', navContact: 'Contacto',
+      heroEyebrow: 'ESTUDIO INDEPENDIENTE DE PRODUCTOS DIGITALES', heroTitle: 'Tecnología útil.<br><em>Hecha para la vida real.</em>',
+      heroDescription: 'Creamos aplicaciones que ayudan a cuidar el tiempo, organizar lo importante y tomar decisiones con más claridad.',
+      heroCta: 'Conoce nuestras apps', heroSecondary: 'Conoce Nexulvi', heroNote: 'Ideas independientes. Productos en desarrollo.', scroll: 'DESLIZA PARA EXPLORAR',
+      stripTitle: 'Tecnología con propósito. Experiencias sin exceso.', productsEyebrow: 'NUESTRO PORTAFOLIO', productsTitle: 'Aplicaciones para<br><em>lo que importa.</em>',
+      productsIntro: 'Cada producto parte de una necesidad concreta. Conoce las ideas que convertimos en herramientas para el día a día.',
+      statusSoon: 'PRÓXIMAMENTE', statusPreparing: 'EN PREPARACIÓN', statusDeveloping: 'EN DESARROLLO', learnProduct: 'Conoce la aplicación',
+      alongaeScreen: 'Hora de<br>respirar.', alongaeCategory: 'BIENESTAR Y ERGONOMÍA', alongaeDescription: 'Pausas guiadas y recordatorios amables para una rutina más saludable frente a la pantalla.',
+      archiveKicker: 'ARCHIVO PERSONAL', archiveTitle: 'Todo en<br>su lugar.', fileOne: 'Factura de luz', fileTwo: 'Documento personal',
+      arqvelloCategory: 'ARCHIVO DIGITAL', arqvelloDescription: 'Digitaliza, organiza y encuentra documentos importantes con privacidad y control local.',
+      financeKicker: 'RESUMEN DEL MES', financeCaption: 'disponible para planificar', cofliraCategory: 'FINANZAS PERSONALES',
+      cofliraDescription: 'Ingresos, gastos y metas organizados para ayudarte a decidir con más tranquilidad.',
+      miauforiaCategory: 'ENTRETENIMIENTO FELINO', miauforiaDescription: 'Juegos interactivos para estimular la curiosidad y el bienestar de los gatos.',
+      sentinelaKicker: 'ANÁLISIS LOCAL', sentinelaScreen: 'Observa.<br>Entiende.', sentinelaCategory: 'INVESTIGACIÓN DIGITAL',
+      sentinelaDescription: 'Lecturas técnicas locales para entender situaciones inusuales e investigar con responsabilidad.',
+      aboutEyebrow: 'SOBRE NEXULVI', aboutTitle: 'Un estudio independiente.<br><em>Productos con intención.</em>',
+      aboutDescription: 'Nexulvi es una empresa de productos digitales. Unimos estrategia, diseño e ingeniería para convertir ideas en aplicaciones útiles y agradables.',
+      talkToUs: 'Hablemos', principleOneTitle: 'Utilidad primero', principleOneText: 'Cada función debe resolver una necesidad real.',
+      principleTwoTitle: 'Privacidad por defecto', principleTwoText: 'Transparencia y cuidado desde el inicio.',
+      principleThreeTitle: 'Tecnología clara', principleThreeText: 'Experiencias simples, aunque la tecnología sea compleja.',
+      contactEyebrow: 'CONTACTA CON NEXULVI', contactTitle: '¿Tienes una idea?<br><em>Hablemos.</em>',
+      contactDescription: '¿Dudas, sugerencias o interés en nuestros productos? Estamos aquí.', contactCta: 'Enviar un correo',
+      footerTagline: 'Productos digitales independientes para la vida real.', backTop: 'Volver arriba ↑', rights: 'Todos los derechos reservados.'
+    },
+    fr: {
+      skip: 'Aller au contenu', language: 'Langue', navProducts: 'Applications', navAbout: 'À propos', navContact: 'Contact',
+      heroEyebrow: 'STUDIO INDÉPENDANT DE PRODUITS NUMÉRIQUES', heroTitle: 'La technologie utile.<br><em>Pour la vraie vie.</em>',
+      heroDescription: 'Nous créons des applications pour mieux gérer son temps, organiser l’essentiel et faire des choix plus clairs.',
+      heroCta: 'Découvrir nos applications', heroSecondary: 'Découvrir Nexulvi', heroNote: 'Des idées indépendantes. Des produits en développement.', scroll: 'FAITES DÉFILER POUR EXPLORER',
+      stripTitle: 'La technologie avec un but. Des expériences sans superflu.', productsEyebrow: 'NOTRE PORTFOLIO', productsTitle: 'Des applications pour<br><em>ce qui compte.</em>',
+      productsIntro: 'Chaque produit répond à un besoin concret. Découvrez les idées que nous transformons en outils du quotidien.',
+      statusSoon: 'BIENTÔT', statusPreparing: 'EN PRÉPARATION', statusDeveloping: 'EN DÉVELOPPEMENT', learnProduct: 'Découvrir l’application',
+      alongaeScreen: 'Le moment de<br>respirer.', alongaeCategory: 'BIEN-ÊTRE ET ERGONOMIE', alongaeDescription: 'Des pauses guidées et des rappels doux pour une routine plus saine devant l’écran.',
+      archiveKicker: 'ARCHIVES PERSONNELLES', archiveTitle: 'Chaque chose<br>à sa place.', fileOne: 'Facture d’électricité', fileTwo: 'Document personnel',
+      arqvelloCategory: 'ARCHIVES NUMÉRIQUES', arqvelloDescription: 'Numérisez, organisez et retrouvez vos documents en toute confidentialité.',
+      financeKicker: 'RÉSUMÉ DU MOIS', financeCaption: 'disponible pour planifier', cofliraCategory: 'FINANCES PERSONNELLES',
+      cofliraDescription: 'Revenus, dépenses et objectifs organisés pour vous aider à décider sereinement.',
+      miauforiaCategory: 'DIVERTISSEMENT FÉLIN', miauforiaDescription: 'Des jeux interactifs pour stimuler la curiosité et le bien-être des chats.',
+      sentinelaKicker: 'ANALYSE LOCALE', sentinelaScreen: 'Observer.<br>Comprendre.', sentinelaCategory: 'INVESTIGATION NUMÉRIQUE',
+      sentinelaDescription: 'Des analyses techniques locales pour comprendre les situations inhabituelles avec responsabilité.',
+      aboutEyebrow: 'À PROPOS DE NEXULVI', aboutTitle: 'Un studio indépendant.<br><em>Des produits qui ont du sens.</em>',
+      aboutDescription: 'Nexulvi est une entreprise de produits numériques. Nous réunissons stratégie, design et ingénierie pour créer des applications utiles et agréables.',
+      talkToUs: 'Parlons-en', principleOneTitle: 'L’utilité avant tout', principleOneText: 'Chaque fonction doit répondre à un vrai besoin.',
+      principleTwoTitle: 'La confidentialité par défaut', principleTwoText: 'Transparence et attention dès le début.',
+      principleThreeTitle: 'Une technologie claire', principleThreeText: 'Des expériences simples, même avec une technologie complexe.',
+      contactEyebrow: 'CONTACTEZ NEXULVI', contactTitle: 'Une idée en tête ?<br><em>Parlons-en.</em>',
+      contactDescription: 'Une question, une suggestion ou envie de suivre nos produits ? Écrivez-nous.', contactCta: 'Envoyer un e-mail',
+      footerTagline: 'Des produits numériques indépendants pour la vraie vie.', backTop: 'Retour en haut ↑', rights: 'Tous droits réservés.'
+    },
+    de: {
+      skip: 'Zum Inhalt springen', language: 'Sprache', navProducts: 'Apps', navAbout: 'Über uns', navContact: 'Kontakt',
+      heroEyebrow: 'UNABHÄNGIGES STUDIO FÜR DIGITALE PRODUKTE', heroTitle: 'Nützliche Technologie.<br><em>Für das echte Leben.</em>',
+      heroDescription: 'Wir entwickeln Apps, die Menschen helfen, ihre Zeit zu nutzen, Wichtiges zu ordnen und klarere Entscheidungen zu treffen.',
+      heroCta: 'Unsere Apps entdecken', heroSecondary: 'Nexulvi kennenlernen', heroNote: 'Unabhängige Ideen. Produkte in Entwicklung.', scroll: 'WEITER SCROLLEN',
+      stripTitle: 'Technologie mit Sinn. Erlebnisse ohne Überfluss.', productsEyebrow: 'UNSER PORTFOLIO', productsTitle: 'Apps für<br><em>das Wesentliche.</em>',
+      productsIntro: 'Jedes Produkt beginnt mit einem konkreten Bedarf. Entdecke unsere Ideen für nützliche Werkzeuge im Alltag.',
+      statusSoon: 'DEMNÄCHST', statusPreparing: 'IN VORBEREITUNG', statusDeveloping: 'IN ENTWICKLUNG', learnProduct: 'App entdecken',
+      alongaeScreen: 'Zeit zum<br>Durchatmen.', alongaeCategory: 'WOHLBEFINDEN UND ERGONOMIE', alongaeDescription: 'Geführte Pausen und sanfte Erinnerungen für einen gesünderen Alltag am Bildschirm.',
+      archiveKicker: 'PERSÖNLICHES ARCHIV', archiveTitle: 'Alles an<br>seinem Platz.', fileOne: 'Stromrechnung', fileTwo: 'Persönliches Dokument',
+      arqvelloCategory: 'DIGITALES ARCHIV', arqvelloDescription: 'Wichtige Dokumente digitalisieren, ordnen und privat lokal verwalten.',
+      financeKicker: 'MONATSÜBERSICHT', financeCaption: 'zur Planung verfügbar', cofliraCategory: 'PERSÖNLICHE FINANZEN',
+      cofliraDescription: 'Einnahmen, Ausgaben und Ziele für ruhigere und klarere Entscheidungen.',
+      miauforiaCategory: 'UNTERHALTUNG FÜR KATZEN', miauforiaDescription: 'Interaktive Spiele für Neugier und Wohlbefinden von Katzen.',
+      sentinelaKicker: 'LOKALE ANALYSE', sentinelaScreen: 'Beobachten.<br>Verstehen.', sentinelaCategory: 'DIGITALE UNTERSUCHUNG',
+      sentinelaDescription: 'Lokale technische Analysen, um ungewöhnliche Situationen verantwortungsvoll zu verstehen.',
+      aboutEyebrow: 'ÜBER NEXULVI', aboutTitle: 'Ein unabhängiges Studio.<br><em>Produkte mit Sinn.</em>',
+      aboutDescription: 'Nexulvi ist ein Unternehmen für digitale Produkte. Wir verbinden Strategie, Design und Engineering zu nützlichen, klaren und angenehmen Apps.',
+      talkToUs: 'Lass uns reden', principleOneTitle: 'Nutzen zuerst', principleOneText: 'Jede Funktion löst einen echten Bedarf.',
+      principleTwoTitle: 'Datenschutz als Standard', principleTwoText: 'Transparenz und Sorgfalt von Anfang an.',
+      principleThreeTitle: 'Technologie verständlich', principleThreeText: 'Einfache Erlebnisse trotz komplexer Technik.',
+      contactEyebrow: 'KONTAKT ZU NEXULVI', contactTitle: 'Eine Idee?<br><em>Lass uns reden.</em>',
+      contactDescription: 'Fragen, Vorschläge oder Interesse an unseren Produkten? Schreib uns.', contactCta: 'E-Mail senden',
+      footerTagline: 'Unabhängige digitale Produkte für das echte Leben.', backTop: 'Nach oben ↑', rights: 'Alle Rechte vorbehalten.'
+    }
+  };
+
+  const languageNames = { pt: 'Português', en: 'English', es: 'Español', fr: 'Français', de: 'Deutsch' };
+
+  function setLanguage(language) {
+    const dictionary = translations[language] || translations.pt;
+    root.lang = language === 'pt' ? 'pt-BR' : language;
+    document.querySelectorAll('[data-i18n]').forEach((element) => {
+      const translation = dictionary[element.dataset.i18n];
+      if (translation) element.innerHTML = translation;
+    });
+    if (languageStatus) languageStatus.textContent = `Idioma alterado para ${languageNames[language] || languageNames.pt}`;
+    storage.set('nexulvi-language', language);
   }
-  function setMotionReduction(reduced) {
-    root.classList.toggle('reduce-motion', reduced);
-    motionToggle.setAttribute('aria-pressed', String(reduced));
-    motionToggle.setAttribute('aria-label', reduced ? 'Ativar animações' : 'Reduzir animações');
-    if (!systemReducedMotion) storage.set('nexulvi-motion-v3', reduced ? 'reduced' : 'full');
-    document.dispatchEvent(new CustomEvent('nexulvi:motion-change', { detail: { reduced } }));
+
+  function setTheme(theme) {
+    const isDark = theme === 'dark';
+    root.dataset.theme = isDark ? 'dark' : 'light';
+    themeToggle.setAttribute('aria-pressed', String(isDark));
+    themeToggle.setAttribute('aria-label', isDark ? 'Ativar modo claro' : 'Ativar modo escuro');
+    themeToggle.firstElementChild.textContent = isDark ? '☼' : '◐';
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', isDark ? '#111613' : '#f7f8f4');
+    storage.set('nexulvi-theme', isDark ? 'dark' : 'light');
   }
-  setMotionReduction(storage.get('nexulvi-motion-v3') === 'reduced' || systemReducedMotion || saveData);
-  motionToggle.addEventListener('click', () => setMotionReduction(!root.classList.contains('reduce-motion')));
-  const stereoDefault = storage.get('nexulvi-stereo-v3', 'on') !== 'off';
-  setStereo(stereoDefault);
-  if (!capableDevice) { setStereo(false); stereoToggle.hidden = true; }
-  stereoToggle.addEventListener('click', () => { if (!root.classList.contains('reduce-motion')) setStereo(!hero.classList.contains('stereo-mode')); });
-  themeToggle.addEventListener('click', () => runViewTransition(() => setTheme(root.dataset.theme === 'light' ? 'dark' : 'light')));
-  languageSelect.addEventListener('change', (event) => runViewTransition(() => setLanguage(event.target.value)));
-  menuToggle.setAttribute('aria-controls', 'mobile-nav');
-  let menuLastFocus = null;
+
   function setMenu(open) {
-    mobileNav.classList.toggle('open', open);
     mobileNav.toggleAttribute('hidden', !open);
     mobileNav.toggleAttribute('inert', !open);
     menuToggle.setAttribute('aria-expanded', String(open));
-    if (open) {
-      menuLastFocus = document.activeElement;
-      mobileNav.querySelector('a')?.focus();
-    } else if (menuLastFocus instanceof HTMLElement) {
-      menuLastFocus.focus();
-    }
+    menuToggle.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
   }
-  mobileNav.toggleAttribute('hidden', true);
-  mobileNav.toggleAttribute('inert', true);
-  menuToggle.addEventListener('click', () => setMenu(!mobileNav.classList.contains('open')));
+
+  const savedLanguage = storage.get('nexulvi-language') || 'pt';
+  languageSelect.value = translations[savedLanguage] ? savedLanguage : 'pt';
+  setLanguage(languageSelect.value);
+  const savedTheme = storage.get('nexulvi-theme');
+  setTheme(savedTheme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+
+  languageSelect.addEventListener('change', (event) => setLanguage(event.target.value));
+  themeToggle.addEventListener('click', () => setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'));
+  menuToggle.addEventListener('click', () => setMenu(menuToggle.getAttribute('aria-expanded') !== 'true'));
   mobileNav.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenu(false)));
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && mobileNav.classList.contains('open')) setMenu(false);
+    if (event.key === 'Escape' && menuToggle.getAttribute('aria-expanded') === 'true') setMenu(false);
   });
-  Object.assign(translations.pt, { categoryOne:'BEM-ESTAR E ERGONOMIA', categoryTwo:'ARQUIVO DIGITAL', categoryThree:'FINANÇAS PESSOAIS', appOne:'Alongaê / Pausas que cuidam do seu ritmo', appOneDescription:'Lembretes locais, pausas guiadas e alongamentos rápidos para quem trabalha diante da tela.', appTwo:'ArqVello / Seu arquivo sob controle', appTwoDescription:'Scanner, PDFs, OCR e organização local para documentos e memórias que importam.', appThree:'Coflira / Clareza para decidir', appThreeDescription:'Receitas, despesas, metas e simulações para organizar hoje e planejar os próximos meses.', followLaunch:'Conhecer o Alongaê', learnMore:'Conhecer o ArqVello', followJourney:'Conhecer o Coflira', future:'EM PREPARAÇÃO' });
-  Object.assign(translations.en, { categoryOne:'WELLNESS AND ERGONOMICS', categoryTwo:'DIGITAL ARCHIVE', categoryThree:'PERSONAL FINANCE', appOne:'Alongae / Breaks for your rhythm', appOneDescription:'Local reminders, guided breaks and quick stretches for screen-based work.', appTwo:'ArqVello / Your archive in control', appTwoDescription:'Scanner, PDFs, OCR and local organization for documents and memories.', appThree:'Coflira / Clarity to decide', appThreeDescription:'Income, expenses, goals and simulations to organize today and plan ahead.', followLaunch:'Explore Alongae', learnMore:'Explore ArqVello', followJourney:'Explore Coflira', future:'IN PREPARATION' });
-  Object.assign(translations.es, { categoryOne:'BIENESTAR Y ERGONOMÍA', categoryTwo:'ARCHIVO DIGITAL', categoryThree:'FINANZAS PERSONALES', appOne:'Alongae / Pausas para tu ritmo', appOneDescription:'Recordatorios locales, pausas guiadas y estiramientos rápidos frente a la pantalla.', appTwo:'ArqVello / Tu archivo bajo control', appTwoDescription:'Escáner, PDFs, OCR y organización local de documentos y recuerdos.', appThree:'Coflira / Claridad para decidir', appThreeDescription:'Ingresos, gastos, metas y simulaciones para organizar y planificar.', followLaunch:'Conocer Alongae', learnMore:'Conocer ArqVello', followJourney:'Conocer Coflira', future:'EN PREPARACIÓN' });
-  Object.assign(translations.fr, { categoryOne:'BIEN-ETRE ET ERGONOMIE', categoryTwo:'ARCHIVE NUMÉRIQUE', categoryThree:'FINANCES PERSONNELLES', appOne:'Alongae / Des pauses pour votre rythme', appOneDescription:'Rappels locaux, pauses guidées et étirements rapides devant un écran.', appTwo:'ArqVello / Votre archive sous contrôle', appTwoDescription:'Scanner, PDF, OCR et organisation locale des documents et souvenirs.', appThree:'Coflira / La clarté pour décider', appThreeDescription:'Revenus, dépenses, objectifs et simulations pour organiser et planifier.', followLaunch:'Découvrir Alongae', learnMore:'Découvrir ArqVello', followJourney:'Découvrir Coflira', future:'EN PRÉPARATION' });
-  Object.assign(translations.de, { categoryOne:'WOHLBEFINDEN UND ERGONOMIE', categoryTwo:'DIGITALES ARCHIV', categoryThree:'PERSÖNLICHE FINANZEN', appOne:'Alongae / Pausen fuer Ihren Rhythmus', appOneDescription:'Lokale Erinnerungen, gefuehrte Pausen und kurze Dehnungen am Bildschirm.', appTwo:'ArqVello / Ihr Archiv unter Kontrolle', appTwoDescription:'Scanner, PDFs, OCR und lokale Ordnung fuer Dokumente und Erinnerungen.', appThree:'Coflira / Klarheit fuer Entscheidungen', appThreeDescription:'Einnahmen, Ausgaben, Ziele und Simulationen zum Organisieren und Planen.', followLaunch:'Alongae entdecken', learnMore:'ArqVello entdecken', followJourney:'Coflira entdecken', future:'IN VORBEREITUNG' });
-  Object.assign(translations.pt, { navSolutions:'Produtos',navManifesto:'Como pensamos',navSupport:'Contato',eyebrow:'PRODUTOS DIGITAIS INDEPENDENTES',heroLineOne:'Feitos para',heroLineTwo:'a vida real.',heroDescription:'A Nexulvi cria aplicativos simples e privados para cuidar do corpo, organizar o que importa e fazer escolhas com mais clareza.',explore:'Conhecer os produtos',discover:'Por que criamos',manifestoEyebrow:'COMO PENSAMOS',manifestoTitle:'Tecnologia boa não pede<br><em>atenção demais.</em>',manifestoCopy:'Criamos ferramentas que respeitam o tempo das pessoas. Cada produto começa com uma rotina concreta, elimina o que é excesso e guarda os dados onde eles devem estar: com quem usa.',statOne:'produtos em construção',statTwo:'cadastros obrigatórios',statThree:'intenção em cada escolha',solutionsEyebrow:'O QUE ESTAMOS CRIANDO',solutionsTitle:'Cinco produtos,<br><em>cinco rotinas reais.</em>',solutionsNote:'Do bem-estar à organização, às finanças e ao entretenimento: cada app resolve uma pequena fricção cotidiana com cuidado, privacidade e clareza.',signalEyebrow:'O PADRÃO NEXULVI',signalTitle:'Menos ruído.<br><em>Mais intenção.</em>',signalCopy:'Não colecionamos recursos. Construímos o essencial, explicamos os limites e evitamos transformar sua rotina em mais uma fonte de notificações e dados dispersos.',supportEyebrow:'VAMOS CONVERSAR',supportTitle:'Acompanhe a próxima<br><em>ideia da Nexulvi.</em>',supportCopy:'Tem uma sugestão, encontrou algo a melhorar ou quer falar sobre os produtos? Escreva. Construir com atenção também é ouvir quem usa.',supportButton:'Enviar uma mensagem',qrLabel:'NEXULVI // PRODUCT NOTES',qrNote:'Ideias em desenvolvimento' });
-  Object.assign(translations.en, { navSolutions:'Products',navManifesto:'How we think',navSupport:'Contact',eyebrow:'INDEPENDENT DIGITAL PRODUCTS',heroLineOne:'Made for',heroLineTwo:'real life.',heroDescription:'Nexulvi creates simple, private apps to care for your body, organize what matters and make clearer choices.',explore:'Explore products',discover:'Why we build',manifestoEyebrow:'HOW WE THINK',manifestoTitle:'Good technology does not ask for<br><em>too much attention.</em>',manifestoCopy:'We build tools that respect people’s time. Every product starts with a real routine, removes excess and keeps data with the person using it.',statOne:'products in progress',statTwo:'required accounts',statThree:'intentional choices',solutionsEyebrow:'WHAT WE ARE BUILDING',solutionsTitle:'Five products,<br><em>five real routines.</em>',solutionsNote:'From wellbeing to organization, finance and entertainment, each app solves a small daily friction with privacy and clarity.',signalEyebrow:'THE NEXULVI STANDARD',signalTitle:'Less noise.<br><em>More intent.</em>',signalCopy:'We do not collect features. We build what is essential and explain the limits.',supportEyebrow:'LET’S TALK',supportTitle:'Follow Nexulvi’s next<br><em>idea.</em>',supportCopy:'Have a suggestion or want to talk about the products? Write to us.',supportButton:'Send a message',qrLabel:'NEXULVI // PRODUCT NOTES',qrNote:'Ideas in development' });
-  Object.assign(translations.es, { navSolutions:'Productos',navManifesto:'Cómo pensamos',navSupport:'Contacto',eyebrow:'PRODUCTOS DIGITALES INDEPENDIENTES',heroLineOne:'Hechos para',heroLineTwo:'la vida real.',heroDescription:'Nexulvi crea aplicaciones simples y privadas para cuidar el cuerpo, organizar lo importante y decidir con claridad.',explore:'Conocer productos',discover:'Por qué creamos',manifestoEyebrow:'CÓMO PENSAMOS',manifestoTitle:'La buena tecnología no pide<br><em>demasiada atención.</em>',manifestoCopy:'Creamos herramientas que respetan el tiempo de las personas y mantienen los datos con quien las usa.',statOne:'productos en desarrollo',statTwo:'cuentas obligatorias',statThree:'intención en cada decisión',solutionsEyebrow:'LO QUE ESTAMOS CREANDO',solutionsTitle:'Cinco productos,<br><em>cinco rutinas reales.</em>',solutionsNote:'Cada app resuelve una pequeña fricción cotidiana con privacidad y claridad.',signalEyebrow:'EL ESTÁNDAR NEXULVI',signalTitle:'Menos ruido.<br><em>Más intención.</em>',signalCopy:'Construimos lo esencial y explicamos sus límites.',supportEyebrow:'HABLEMOS',supportTitle:'Sigue la próxima<br><em>idea de Nexulvi.</em>',supportCopy:'¿Tienes una sugerencia o quieres hablar de los productos? Escríbenos.',supportButton:'Enviar un mensaje',qrLabel:'NEXULVI // PRODUCT NOTES',qrNote:'Ideas en desarrollo' });
-  Object.assign(translations.fr, { navSolutions:'Produits',navManifesto:'Notre approche',navSupport:'Contact',eyebrow:'PRODUITS NUMÉRIQUES INDÉPENDANTS',heroLineOne:'Faits pour',heroLineTwo:'la vie réelle.',heroDescription:'Nexulvi crée des applications simples et privées pour le corps, l organisation et des décisions plus claires.',explore:'Découvrir les produits',discover:'Pourquoi nous créons',manifestoEyebrow:'NOTRE APPROCHE',manifestoTitle:'La bonne technologie ne demande pas<br><em>trop d attention.</em>',manifestoCopy:'Nous créons des outils qui respectent le temps et gardent les données avec leur utilisateur.',statOne:'produits en préparation',statTwo:'comptes obligatoires',statThree:'choix intentionnels',solutionsEyebrow:'CE QUE NOUS CRÉONS',solutionsTitle:'Cinq produits,<br><em>cinq routines réelles.</em>',solutionsNote:'Chaque app résout une petite friction quotidienne avec clarté et confidentialité.',signalEyebrow:'LE STANDARD NEXULVI',signalTitle:'Moins de bruit.<br><em>Plus d intention.</em>',signalCopy:'Nous construisons l essentiel et expliquons les limites.',supportEyebrow:'PARLONS-EN',supportTitle:'Suivez la prochaine<br><em>idée de Nexulvi.</em>',supportCopy:'Une suggestion ou une question sur les produits ? Écrivez-nous.',supportButton:'Envoyer un message',qrLabel:'NEXULVI // PRODUCT NOTES',qrNote:'Idées en développement' });
-  Object.assign(translations.de, { navSolutions:'Produkte',navManifesto:'Unser Ansatz',navSupport:'Kontakt',eyebrow:'UNABHÄNGIGE DIGITALE PRODUKTE',heroLineOne:'Gemacht fuer',heroLineTwo:'den echten Alltag.',heroDescription:'Nexulvi entwickelt einfache, private Apps fuer Koerper, Ordnung und klarere Entscheidungen.',explore:'Produkte entdecken',discover:'Warum wir bauen',manifestoEyebrow:'UNSER ANSATZ',manifestoTitle:'Gute Technologie verlangt nicht<br><em>zu viel Aufmerksamkeit.</em>',manifestoCopy:'Wir bauen Werkzeuge, die Zeit respektieren und Daten bei den Nutzern lassen.',statOne:'Produkte in Entwicklung',statTwo:'Pflichtkonten',statThree:'bewusste Entscheidungen',solutionsEyebrow:'WAS WIR BAUEN',solutionsTitle:'Fünf Produkte,<br><em>fünf echte Routinen.</em>',solutionsNote:'Jede App loest eine kleine alltaegliche Reibung mit Klarheit und Datenschutz.',signalEyebrow:'DER NEXULVI-STANDARD',signalTitle:'Weniger Laerm.<br><em>Mehr Absicht.</em>',signalCopy:'Wir bauen das Wesentliche und erklaeren Grenzen.',supportEyebrow:'LASS UNS REDEN',supportTitle:'Folge der naechsten<br><em>Nexulvi-Idee.</em>',supportCopy:'Vorschlag oder Frage zu unseren Produkten? Schreib uns.',supportButton:'Nachricht senden',qrLabel:'NEXULVI // PRODUCT NOTES',qrNote:'Ideen in Entwicklung' });
-  setLanguage(languageSelect.value);
-  matchMedia('(min-width: 851px)').addEventListener('change', (event) => { if (event.matches) setMenu(false); });
-  const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('visible'); if (entry.target.classList.contains('scroll-scene')) entry.target.classList.add('scene-live'); observer.unobserve(entry.target); } }), { threshold: .12 });
-  document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
-  const glow = document.querySelector('.cursor-glow');
-  const progress = document.querySelector('.scroll-progress span');
-  const header = document.querySelector('.site-header');
-  const loader = document.querySelector('#site-loader');
-  const loaderPercent = document.querySelector('.loader-percent');
-  let loaderValue = 0;
-  const loaderTimer = window.setInterval(() => { loaderValue = Math.min(loaderValue + Math.ceil(Math.random() * 22), 100); loaderPercent.textContent = `${String(loaderValue).padStart(2, '0')}%`; if (loaderValue >= 100) { window.clearInterval(loaderTimer); window.setTimeout(() => loader.classList.add('is-hidden'), 100); } }, 45);
-  let ticking = false;
-  function updateScrollEffects() {
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    const amount = maxScroll > 0 ? Math.min(window.scrollY / maxScroll, 1) : 0;
-    root.style.setProperty('--scroll-progress', amount.toFixed(3));
-    root.style.setProperty('--scroll-scale', (0.7 + amount * 0.5).toFixed(3));
-    root.style.setProperty('--hero-parallax', Math.min(window.scrollY, 260).toFixed(1));
-    root.style.setProperty('--signal-angle', `${(window.scrollY * .035).toFixed(1)}deg`);
-    document.body.classList.toggle('scene-charging', window.scrollY > 24);
-    progress.style.width = `${amount * 100}%`;
-    header.classList.toggle('scrolled', window.scrollY > 18);
-    ticking = false;
-  }
-  window.addEventListener('scroll', () => { if (!ticking) { window.requestAnimationFrame(updateScrollEffects); ticking = true; } }, { passive: true });
-  updateScrollEffects();
-  const canHover = !saveData && matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if (canHover) {
-    const cursorSystem = document.querySelector('.cursor-system');
-    const cursorCore = document.querySelector('.cursor-core');
-    const cursorRing = document.querySelector('.cursor-ring');
-    const cursorLabel = document.querySelector('.cursor-label');
-    let pointerX = window.innerWidth / 2; let pointerY = window.innerHeight / 2; let ringX = pointerX; let ringY = pointerY;
-    cursorSystem.classList.add('is-active');
-    const trail = document.createElement('div');
-    trail.className = 'cursor-trail';
-    const trailDots = Array.from({ length: 9 }, () => { const dot = document.createElement('i'); trail.appendChild(dot); return dot; });
-    const trailPoints = trailDots.map(() => ({ x: pointerX, y: pointerY }));
-    document.body.appendChild(trail);
-    let cursorFrame = 0;
-    function moveCursor() {
-      cursorFrame = 0;
-      if (document.hidden || root.classList.contains('reduce-motion')) return;
-      ringX += (pointerX - ringX) * .16; ringY += (pointerY - ringY) * .16;
-      cursorCore.style.left = `${pointerX}px`; cursorCore.style.top = `${pointerY}px`; cursorRing.style.left = `${ringX}px`; cursorRing.style.top = `${ringY}px`; cursorLabel.style.left = `${ringX}px`; cursorLabel.style.top = `${ringY}px`;
-      trailPoints.forEach((point, index) => { const target = index === 0 ? { x: pointerX, y: pointerY } : trailPoints[index - 1]; point.x += (target.x - point.x) * (.25 - index * .015); point.y += (target.y - point.y) * (.25 - index * .015); trailDots[index].style.left = `${point.x}px`; trailDots[index].style.top = `${point.y}px`; trailDots[index].style.opacity = `${Math.max(0, .48 - index * .045)}`; });
-      cursorFrame = window.requestAnimationFrame(moveCursor);
-    }
-    const pauseCursor = () => { if (document.hidden || root.classList.contains('reduce-motion')) { if (cursorFrame) window.cancelAnimationFrame(cursorFrame); cursorFrame = 0; } else if (!cursorFrame) cursorFrame = window.requestAnimationFrame(moveCursor); };
-    document.addEventListener('visibilitychange', pauseCursor); document.addEventListener('nexulvi:motion-change', pauseCursor);
-    moveCursor();
-    window.addEventListener('pointermove', (event) => { pointerX = event.clientX; pointerY = event.clientY; glow.style.left = `${event.clientX}px`; glow.style.top = `${event.clientY}px`; }, { passive: true });
-    document.querySelectorAll('a, button, select, .app-card, [data-cursor]').forEach((element) => { element.addEventListener('pointerenter', () => { cursorSystem.classList.add('is-hover'); cursorLabel.textContent = element.dataset.cursor || (element.classList.contains('app-card') ? 'VIEW' : 'OPEN'); }); element.addEventListener('pointerleave', () => cursorSystem.classList.remove('is-hover')); });
-    document.querySelectorAll('.button, .card-link, .text-link').forEach((element) => {
-       element.addEventListener('pointermove', (event) => { const rect = element.getBoundingClientRect(); const localX = event.clientX - rect.left; const localY = event.clientY - rect.top; element.style.setProperty('--pointer-x', `${localX}px`); element.style.setProperty('--pointer-y', `${localY}px`); if (element.classList.contains('button')) { element.style.setProperty('--mag-x', `${((localX / rect.width) - .5) * 8}px`); element.style.setProperty('--mag-y', `${((localY / rect.height) - .5) * 5}px`); } });
-      element.addEventListener('pointerenter', () => glow.classList.add('cursor-hover'));
-       element.addEventListener('pointerleave', () => { glow.classList.remove('cursor-hover'); element.style.setProperty('--mag-x', '0px'); element.style.setProperty('--mag-y', '0px'); });
-      element.addEventListener('click', (event) => { const rect = element.getBoundingClientRect(); const ripple = document.createElement('span'); ripple.className = 'ripple'; ripple.setAttribute('aria-hidden', 'true'); ripple.style.left = `${event.clientX - rect.left}px`; ripple.style.top = `${event.clientY - rect.top}px`; element.appendChild(ripple); ripple.addEventListener('animationend', () => ripple.remove(), { once: true }); });
-    });
-     document.querySelectorAll('.app-card').forEach((card) => {
-       card.addEventListener('pointermove', (event) => { const rect = card.getBoundingClientRect(); const x = (event.clientX - rect.left) / rect.width; const y = (event.clientY - rect.top) / rect.height; card.style.setProperty('--tilt-y', `${((x - .5) * 7).toFixed(2)}deg`); card.style.setProperty('--tilt-x', `${((.5 - y) * 7).toFixed(2)}deg`); card.style.setProperty('--shine-x', `${(x * 100).toFixed(1)}%`); card.style.setProperty('--shine-y', `${(y * 100).toFixed(1)}%`); });
-       card.addEventListener('pointerleave', () => { card.style.setProperty('--tilt-x', '0deg'); card.style.setProperty('--tilt-y', '0deg'); });
-     });
-     const interactiveHero = document.querySelector('.hero-visual');
-     if (interactiveHero) {
-       interactiveHero.addEventListener('pointermove', (event) => { const rect = interactiveHero.getBoundingClientRect(); const x = (event.clientX - rect.left) / rect.width - .5; const y = (event.clientY - rect.top) / rect.height - .5; interactiveHero.style.setProperty('--hero-tilt-y', `${(x * 8).toFixed(2)}deg`); interactiveHero.style.setProperty('--hero-tilt-x', `${(-y * 6).toFixed(2)}deg`); });
-       interactiveHero.addEventListener('pointerleave', () => { interactiveHero.style.setProperty('--hero-tilt-x', '0deg'); interactiveHero.style.setProperty('--hero-tilt-y', '0deg'); });
-     }
-   }
-  const sections = [...document.querySelectorAll('main section[id]')];
-  const navLinks = [...document.querySelectorAll('.desktop-nav a, .mobile-nav a')];
-  const sectionObserver = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) navLinks.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`)); }), { rootMargin: '-30% 0px -55% 0px' });
-  sections.forEach((section) => sectionObserver.observe(section));
-  const scenes = [...document.querySelectorAll('.scroll-scene')];
-   let scenesTicking = false;
-   function updateScenes() { scenes.forEach((scene) => { const rect = scene.getBoundingClientRect(); const span = window.innerHeight + rect.height; const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / span)); scene.style.setProperty('--scene-progress', progress.toFixed(3)); scene.style.setProperty('--scene-lift', `${((.5 - progress) * 18).toFixed(1)}px`); }); scenesTicking = false; }
-  window.addEventListener('scroll', () => { if (!scenesTicking) { window.requestAnimationFrame(updateScenes); scenesTicking = true; } }, { passive: true }); updateScenes();
-  function initNetworkCanvas() {
-    const canvas = document.querySelector('#network-canvas');
-    if (!canvas || saveData || root.classList.contains('reduce-motion') || matchMedia('(prefers-reduced-motion: reduce)').matches || (navigator.deviceMemory && navigator.deviceMemory <= 2)) return;
-    const context = canvas.getContext('2d');
-    if (!context) { if (fxStatus) fxStatus.querySelector('span').textContent = 'NEXULVI FX // CSS FALLBACK'; return; }
-    const networkHero = canvas.closest('.hero');
-    let width = 0; let height = 0; let particles = []; let mouseX = 0; let mouseY = 0; let scrollEnergy = 0; let lastScroll = window.scrollY;
-    let frameId = 0; let visible = true; let paused = document.hidden;
-    let centerGradient = null; let gradientRadius = 0; let gradientX = 0; let gradientY = 0;
-    const isTouch = matchMedia('(hover: none)').matches;
-    function resize() {
-      const bounds = networkHero.getBoundingClientRect();
-       const dpr = Math.min(window.devicePixelRatio || 1, isTouch ? 1.25 : 1.5);
-      width = bounds.width; height = bounds.height;
-      canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr);
-      context.setTransform(dpr, 0, 0, dpr, 0, 0);
-       const count = Math.max(isTouch ? 28 : 46, Math.min(isTouch ? 48 : 82, Math.floor(width * height / (isTouch ? 21000 : 15000))));
-      particles = Array.from({ length: count }, () => ({ x: Math.random() * width, y: Math.random() * height, z: .25 + Math.random() * .9, vx: (Math.random() - .5) * .18, vy: (Math.random() - .5) * .18, size: .5 + Math.random() * 1.8 }));
-      centerGradient = null; gradientRadius = 0;
-    }
-    function schedule() { if (!frameId && visible && !paused) frameId = window.requestAnimationFrame(draw); }
-    function draw(time) {
-      frameId = 0;
-      if (!visible || paused) return;
-      context.clearRect(0, 0, width, height);
-      const centerX = width * .66 + mouseX * 55; const centerY = height * .48 + mouseY * 35; const localEnergy = Math.min(scrollEnergy, 1);
-      particles.forEach((particle) => {
-        particle.x += particle.vx * (1 + localEnergy * 5); particle.y += particle.vy * (1 + localEnergy * 5);
-        if (particle.x < -20) particle.x = width + 20; if (particle.x > width + 20) particle.x = -20;
-        if (particle.y < -20) particle.y = height + 20; if (particle.y > height + 20) particle.y = -20;
-        const dx = particle.x - centerX; const dy = particle.y - centerY; const distanceSq = dx * dx + dy * dy;
-        if (distanceSq < 28900 && distanceSq > 0) { const distance = Math.sqrt(distanceSq); particle.x += dx / distance * .32; particle.y += dy / distance * .32; }
-        const distance = Math.sqrt(distanceSq); const alpha = Math.max(.08, .55 - distance / 850) * particle.z;
-        context.beginPath(); context.fillStyle = `rgba(141,255,224,${alpha})`; context.arc(particle.x + mouseX * particle.z * 20, particle.y + mouseY * particle.z * 14, particle.size * particle.z, 0, Math.PI * 2); context.fill();
-      });
-      for (let i = 0; i < particles.length; i += 1) for (let j = i + 1; j < particles.length; j += 1) {
-        const a = particles[i]; const b = particles[j]; const dx = a.x - b.x; const dy = a.y - b.y; const distanceSq = dx * dx + dy * dy;
-        if (distanceSq < 11664) { const distance = Math.sqrt(distanceSq); context.beginPath(); context.strokeStyle = `rgba(141,255,224,${(1 - distance / 108) * .23})`; context.lineWidth = .55; context.moveTo(a.x, a.y); context.lineTo(b.x, b.y); context.stroke(); }
-      }
-      const pulse = 38 + Math.sin(time * .002) * 8 + localEnergy * 22; const radius = Math.round(pulse * 3); const roundedX = Math.round(centerX); const roundedY = Math.round(centerY);
-      if (!centerGradient || gradientRadius !== radius || gradientX !== roundedX || gradientY !== roundedY) { centerGradient = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius); centerGradient.addColorStop(0, 'rgba(141,255,224,.28)'); centerGradient.addColorStop(.35, 'rgba(153,133,255,.1)'); centerGradient.addColorStop(1, 'rgba(141,255,224,0)'); gradientRadius = radius; gradientX = roundedX; gradientY = roundedY; }
-      context.fillStyle = centerGradient; context.beginPath(); context.arc(centerX, centerY, radius, 0, Math.PI * 2); context.fill(); scrollEnergy *= .93; schedule();
-    }
-    const visibilityObserver = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; if (visible) schedule(); else if (frameId) { window.cancelAnimationFrame(frameId); frameId = 0; } }, { threshold: 0 });
-    visibilityObserver.observe(networkHero);
-    const pause = () => { paused = document.hidden || root.classList.contains('reduce-motion'); if (paused && frameId) { window.cancelAnimationFrame(frameId); frameId = 0; } else schedule(); };
-    window.addEventListener('resize', resize); document.addEventListener('visibilitychange', pause); document.addEventListener('nexulvi:motion-change', pause);
-    window.addEventListener('pointermove', (event) => { const rect = networkHero.getBoundingClientRect(); mouseX = (event.clientX - rect.left - rect.width / 2) / rect.width; mouseY = (event.clientY - rect.top - rect.height / 2) / rect.height; }, { passive: true });
-    window.addEventListener('scroll', () => { scrollEnergy = Math.min(1, Math.abs(window.scrollY - lastScroll) / 35); lastScroll = window.scrollY; }, { passive: true });
-    resize(); if (fxStatus) fxStatus.querySelector('span').textContent = 'NEXULVI FX // CANVAS + S3D'; schedule();
-  }
-  initNetworkCanvas();
-  if (capableDevice) import('./stereo-scene.js').catch(() => { if (fxStatus) fxStatus.querySelector('span').textContent = 'NEXULVI FX // CSS MODE'; });
+  matchMedia('(min-width: 641px)').addEventListener('change', (event) => {
+    if (event.matches) setMenu(false);
+  });
 })();

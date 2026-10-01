@@ -1,142 +1,159 @@
 <!doctype html>
-<html lang="pt-BR" data-theme="dark">
+<html lang="pt-BR" data-theme="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; form-action 'self'; upgrade-insecure-requests">
-  <link rel="stylesheet" href="assets/fonts/fonts.css">
   <meta name="referrer" content="no-referrer">
-  <meta name="description" content="Nexulvi cria produtos digitais independentes para tornar o cotidiano mais leve, organizado e claro.">
-  <meta name="theme-color" content="#071018">
-  <meta property="og:title" content="Nexulvi — Produtos para a vida real">
-  <meta property="og:description" content="Aplicativos independentes para bem-estar, organização e finanças pessoais.">
-   <meta property="og:type" content="website">
-   <meta property="og:url" content="https://leonardodcb.github.io/Nexulvi/">
-   <meta property="og:locale" content="pt_BR">
-   <meta property="og:site_name" content="Nexulvi">
-   <meta name="twitter:card" content="summary">
-   <link rel="canonical" href="https://leonardodcb.github.io/Nexulvi/">
-   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-   <link rel="manifest" href="site.webmanifest">
-  <title>Nexulvi — Produtos para a vida real</title>
+  <meta name="description" content="A Nexulvi cria aplicativos independentes para bem-estar, organização, finanças e entretenimento.">
+  <meta name="theme-color" content="#f7f8f4">
+  <meta property="og:title" content="Nexulvi — Aplicativos para a vida real">
+  <meta property="og:description" content="Produtos digitais independentes, úteis e feitos com atenção às pessoas.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://leonardodcb.github.io/Nexulvi/">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Nexulvi">
+  <meta name="twitter:card" content="summary">
+  <link rel="canonical" href="https://leonardodcb.github.io/Nexulvi/">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="assets/fonts/fonts.css">
   <link rel="stylesheet" href="styles.css">
+  <title>Nexulvi — Aplicativos para a vida real</title>
   <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Organization",
-    "name":"Nexulvi",
-     "url":"https://leonardodcb.github.io/Nexulvi/",
-     "description":"Produtos digitais independentes para bem-estar, organização e finanças pessoais."
-  }
+  {"@context":"https://schema.org","@type":"Organization","name":"Nexulvi","url":"https://leonardodcb.github.io/Nexulvi/","description":"Estúdio independente que cria aplicativos para a vida real."}
   </script>
 </head>
 <body>
-   <a class="skip-link" href="#main-content" data-i18n="skip">Pular para o conteúdo</a>
-   <p class="sr-only" id="language-status" aria-live="polite" aria-atomic="true"></p>
-  <div class="noise" aria-hidden="true"></div>
-  <div class="cursor-glow" aria-hidden="true"></div>
-  <div class="cursor-system" aria-hidden="true"><span class="cursor-core"></span><span class="cursor-ring"></span><span class="cursor-label">EXPLORE</span></div>
-  <div class="scroll-progress" aria-hidden="true"><span></span></div>
-  <div class="scroll-orbit" aria-hidden="true"><span></span></div>
-   <div class="fx-status" id="fx-status" aria-live="off"><i></i><span>NEXULVI FX BOOTING</span></div>
-  <div class="site-loader" id="site-loader" aria-hidden="true"><div class="loader-mark"><i></i><i></i><i></i></div><div class="loader-meta"><span>NEXULVI // SYSTEM</span><strong>CONNECTING IDEAS</strong><span class="loader-percent">00%</span></div><div class="loader-bar"><span></span></div></div>
-
+  <a class="skip-link" href="#main-content" data-i18n="skip">Pular para o conteúdo</a>
   <header class="site-header" id="top">
-    <a class="brand" href="#top" aria-label="Nexulvi - início">
+    <a class="brand" href="#top" aria-label="Nexulvi — início">
       <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
       <span>NEXULVI</span>
     </a>
     <nav class="desktop-nav" aria-label="Navegação principal">
-       <a href="#solutions" data-i18n="navSolutions">Produtos</a>
-       <a href="#manifesto" data-i18n="navManifesto">Como pensamos</a>
-       <a href="#support" data-i18n="navSupport">Contato</a>
+      <a href="#products" data-i18n="navProducts">Aplicativos</a>
+      <a href="#about" data-i18n="navAbout">Sobre nós</a>
+      <a href="#contact" data-i18n="navContact">Contato</a>
     </nav>
     <div class="header-tools">
-      <label class="language-picker" aria-label="Selecionar idioma">
-        <span class="sr-only">Idioma</span>
-        <select id="language-select">
+      <label class="language-picker">
+        <span class="sr-only" data-i18n="language">Idioma</span>
+        <select id="language-select" aria-label="Idioma">
           <option value="pt">PT</option><option value="en">EN</option><option value="es">ES</option><option value="fr">FR</option><option value="de">DE</option>
         </select>
       </label>
-      <button class="icon-button" id="theme-toggle" type="button" aria-label="Alternar tema" aria-pressed="false">
-        <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
-        <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 0 1 9.3 3.5 8.5 8.5 0 1 0 20.5 14.7Z"></path></svg>
-      </button>
-      <button class="icon-button motion-button" id="motion-toggle" type="button" aria-label="Reduzir animações" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h3m10 0h3M12 4v3m0 10v3M6.3 6.3l2.1 2.1m7.2 7.2 2.1 2.1m0-11.4-2.1 2.1m-7.2 7.2-2.1 2.1"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
-       <button class="stereo-toggle" id="stereo-toggle" type="button" aria-label="Desativar modo estéreo" aria-pressed="true"><span>S3D</span></button>
-       <button class="menu-button" id="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-nav"><span></span><span></span></button>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Ativar modo escuro" aria-pressed="false"><span aria-hidden="true">◐</span></button>
+      <button class="menu-button" id="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-nav"><span></span><span></span></button>
     </div>
-     <nav class="mobile-nav" id="mobile-nav" aria-label="Navegação móvel" hidden inert>
-       <a href="#solutions" data-i18n="navSolutions">Produtos</a><a href="#manifesto" data-i18n="navManifesto">Como pensamos</a><a href="#support" data-i18n="navSupport">Contato</a>
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Navegação móvel" hidden inert>
+      <a href="#products" data-i18n="navProducts">Aplicativos</a>
+      <a href="#about" data-i18n="navAbout">Sobre nós</a>
+      <a href="#contact" data-i18n="navContact">Contato</a>
     </nav>
   </header>
 
   <main id="main-content">
-    <section class="hero section-shell stereo-mode" aria-labelledby="hero-title">
-      <canvas class="network-canvas" id="network-canvas" aria-hidden="true"></canvas>
-      <div class="hero-grid" aria-hidden="true"></div>
-      <div class="hero-hud" aria-hidden="true">
-        <span class="hud-corner hud-corner-tl"></span><span class="hud-corner hud-corner-tr"></span><span class="hud-corner hud-corner-bl"></span><span class="hud-corner hud-corner-br"></span>
-        <div class="hud-readout hud-readout-top"><span>NX-CORE / 001</span><i></i><span>LIVE SIGNAL</span></div>
-        <div class="hud-readout hud-readout-side"><span>01</span><span>02</span><span>03</span><span>04</span></div>
-        <div class="hud-scanline"></div>
-        <div class="hud-crosshair"><i></i><i></i><b></b></div>
-        <div class="hud-readout hud-readout-bottom"><span>LAT 23.5505</span><span>LONG 46.6333</span><strong>ONLINE</strong></div>
+    <section class="hero page-shell" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true">N</span><span data-i18n="heroEyebrow">ESTÚDIO INDEPENDENTE DE PRODUTOS DIGITAIS</span></p>
+        <h1 id="hero-title" data-i18n="heroTitle">Tecnologia útil.<br><em>Feita para a vida real.</em></h1>
+        <p class="hero-description" data-i18n="heroDescription">Criamos aplicativos que ajudam as pessoas a cuidar do seu tempo, organizar o que importa e fazer escolhas com mais clareza.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#products"><span data-i18n="heroCta">Conheça nossos aplicativos</span><span aria-hidden="true">↘</span></a>
+          <a class="text-link" href="#about" data-i18n="heroSecondary">Quem é a Nexulvi</a>
+        </div>
+        <div class="hero-note"><span class="status-dot" aria-hidden="true"></span><span data-i18n="heroNote">Ideias independentes. Produtos em construção.</span></div>
       </div>
-      <div class="hero-orbit orbit-one" aria-hidden="true"></div><div class="hero-orbit orbit-two" aria-hidden="true"></div>
-      <div class="hero-copy reveal">
-         <p class="eyebrow"><span class="pulse-dot"></span><span data-i18n="eyebrow">PRODUTOS DIGITAIS INDEPENDENTES</span></p>
-         <h1 id="hero-title"><span data-i18n="heroLineOne">Feitos para</span><br><em data-i18n="heroLineTwo">a vida real.</em></h1>
-         <p class="hero-description" data-i18n="heroDescription">A Nexulvi cria aplicativos simples e privados para cuidar do corpo, organizar o que importa e fazer escolhas com mais clareza.</p>
-         <div class="hero-actions"><a class="button button-primary" data-cursor="EXPLORE" href="#solutions"><span data-i18n="explore">Conhecer os produtos</span><span aria-hidden="true">↓</span></a><a class="text-link" data-cursor="DISCOVER" href="#manifesto"><span data-i18n="discover">Por que criamos</span><span aria-hidden="true">↓</span></a></div>
+      <div class="hero-art" aria-label="Prévia ilustrativa de um painel digital Nexulvi" role="img">
+        <div class="art-topline"><span>NEXULVI / STUDIO</span><span>PRODUCTS · 2026</span></div>
+        <div class="art-card art-card-main">
+          <div class="art-card-heading"><span class="art-icon">N.</span><span>DA IDEIA AO APP</span><span class="art-index">01—05</span></div>
+          <div class="art-lines"><i></i><i></i><i></i></div>
+          <div class="art-bottom"><span>DESIGN COM INTENÇÃO</span><b aria-hidden="true">↗</b></div>
+        </div>
+        <div class="art-float art-float-one"><span class="float-glyph">✳</span><span>DESIGN</span><b>01</b></div>
+        <div class="art-float art-float-two"><span class="float-glyph">⌘</span><span>TECNOLOGIA</span><b>02</b></div>
+        <div class="art-caption"><span>UM PORTFÓLIO EM MOVIMENTO</span><span class="caption-line"></span><span>BRASIL · DIGITAL</span></div>
       </div>
-      <div class="hero-visual reveal delay-one" aria-label="Visualização abstrata de conexões digitais" role="img" data-cursor="CONNECT">
-        <canvas class="stereo-canvas" id="stereo-canvas" aria-hidden="true"></canvas>
-        <div class="stereo-overlay" aria-hidden="true"><div class="stereo-eye eye-left"><span>LEFT EYE</span></div><div class="stereo-eye eye-right"><span>RIGHT EYE</span></div><i class="stereo-divider"></i></div>
-         <div class="visual-label label-top">NXL // VIDA REAL</div><div class="visual-label label-bottom">THREE_PRODUCTS / ONE_INTENT</div>
-        <div class="core-orb"><div class="orb-inner"></div><div class="orb-ring ring-a"></div><div class="orb-ring ring-b"></div><div class="orb-ring ring-c"></div></div>
-        <span class="node node-a"></span><span class="node node-b"></span><span class="node node-c"></span><span class="node node-d"></span>
-        <svg class="connection-lines" viewBox="0 0 520 540" fill="none" aria-hidden="true"><path d="M86 155 260 270 440 104M260 270 405 432M260 270 110 415"/><path d="M40 88 86 155M440 104l46-38M405 432l38 45M110 415l-52 30"/></svg>
-      </div>
-      <div class="scroll-cue" aria-hidden="true"><span></span><small>SCROLL TO CONNECT</small></div>
+      <a class="hero-scroll" href="#products"><span data-i18n="scroll">ROLE PARA EXPLORAR</span><span aria-hidden="true">↓</span></a>
     </section>
 
-      <section class="ticker" aria-label="Menos atrito, mais clareza e dados sob seu controle"><div class="ticker-track" aria-hidden="true"><span>MENOS ATRITO</span><b>✦</b><span>MAIS CLAREZA</span><b>✦</b><span>DADOS SOB SEU CONTROLE</span><b>✦</b><span>MENOS ATRITO</span><b>✦</b><span>MAIS CLAREZA</span><b>✦</b></div></section>
-
-     <section class="product-marquee section-shell" aria-label="Produtos Nexulvi">
-       <p class="product-marquee-label">NEXULVI APRESENTA</p>
-       <div class="product-marquee-links">
-         <a class="product-wordmark wordmark-alongae" href="alongae.html"><span>01</span>ALONGAÊ<small>Bem-estar</small></a>
-         <a class="product-wordmark wordmark-arqvello" href="arqvello.html"><span>02</span>ARQVELLO<small>Arquivo pessoal</small></a>
-          <a class="product-wordmark wordmark-coflira" href="coflira.html"><span>03</span>COFLIRA<small>Finanças pessoais</small></a>
-           <a class="product-wordmark" href="miauforia.html"><span>04</span>MIAUFORIA<small>Brincadeira felina</small></a>
-           <a class="product-wordmark wordmark-sentinela" href="sentinela.html"><span>05</span>SENTINELA<small>Investigação local</small></a>
-       </div>
-     </section>
-
-    <section class="section-shell manifesto section-spacing scroll-scene" id="manifesto" aria-labelledby="manifesto-title">
-       <div class="section-intro reveal"><p class="eyebrow"><span>01</span><span data-i18n="manifestoEyebrow">COMO PENSAMOS</span></p><h2 id="manifesto-title" data-i18n="manifestoTitle">Tecnologia boa não pede<br><em>atenção demais.</em></h2></div>
-       <div class="manifesto-content reveal delay-one"><p class="large-copy" data-i18n="manifestoCopy">Criamos ferramentas que respeitam o tempo das pessoas. Cada produto começa com uma rotina concreta, elimina o que é excesso e guarda os dados onde eles devem estar: com quem usa.</p><div class="line-stats"><div><strong>05</strong><span data-i18n="statOne">produtos em construção</span></div><div><strong>0</strong><span data-i18n="statTwo">cadastros obrigatórios</span></div><div><strong>100%</strong><span data-i18n="statThree">intenção em cada escolha</span></div></div></div>
+    <section class="intro-strip" aria-label="Princípios Nexulvi">
+      <div class="page-shell intro-strip-inner"><p data-i18n="stripTitle">Tecnologia com propósito. Experiências sem excesso.</p><span>DESDE A PRIMEIRA IDEIA <b aria-hidden="true">✳</b></span></div>
     </section>
 
-    <section class="solutions section-shell section-spacing scroll-scene" id="solutions" aria-labelledby="solutions-title">
-       <div class="section-heading reveal"><div><p class="eyebrow"><span>02</span><span data-i18n="solutionsEyebrow">O QUE ESTAMOS CRIANDO</span></p><h2 id="solutions-title" data-i18n="solutionsTitle">Cinco produtos,<br><em>cinco rotinas reais.</em></h2></div><p class="section-note" data-i18n="solutionsNote">Do bem-estar à organização, às finanças e ao entretenimento: cada app resolve uma pequena fricção cotidiana com cuidado, privacidade e clareza.</p></div>
-      <div class="app-grid">
-          <article class="app-card app-card-featured reveal" data-cursor="OPEN"><div class="card-visual visual-alongae"><span class="card-tag" data-i18n="comingSoon">EM BREVE</span><span class="card-code">ALONGAÊ / 01</span><div class="product-preview stretch-preview"><span>PAUSA ATIVA</span><strong>Hora de<br>respirar.</strong><div class="preview-meter"><i></i></div><small>03:00 · Ombros e pescoço</small></div></div><div class="card-body"><p class="card-category" data-i18n="categoryOne">BEM-ESTAR E ERGONOMIA</p><h3 data-i18n="appOne">Alongaê / Pausas que cuidam do seu ritmo</h3><p data-i18n="appOneDescription">Lembretes locais, pausas guiadas e alongamentos rápidos para quem trabalha diante da tela.</p><a class="card-link" data-cursor="OPEN" href="alongae.html"><span data-i18n="followLaunch">Conhecer o Alongaê</span><span>↗</span></a></div></article>
-          <article class="app-card reveal delay-one" data-cursor="OPEN"><div class="card-visual visual-arqvello"><span class="card-tag" data-i18n="comingSoon">EM BREVE</span><span class="card-code">ARQVELLO / 02</span><div class="product-preview archive-preview"><span>BIBLIOTECA PESSOAL</span><strong>Documentos<br>recentes</strong><div class="preview-row"><i></i><b>Conta de energia</b></div><div class="preview-row"><i></i><b>Contrato de aluguel</b></div></div></div><div class="card-body"><p class="card-category" data-i18n="categoryTwo">ARQUIVO DIGITAL</p><h3 data-i18n="appTwo">ArqVello / Seu arquivo sob controle</h3><p data-i18n="appTwoDescription">Scanner, PDFs, OCR e organização local para documentos e memórias que importam.</p><a class="card-link" data-cursor="OPEN" href="arqvello.html"><span data-i18n="learnMore">Conhecer o ArqVello</span><span>↗</span></a></div></article>
-           <article class="app-card reveal delay-two" data-cursor="OPEN"><div class="card-visual visual-coflira"><span class="card-tag" data-i18n="future">EM PREPARAÇÃO</span><span class="card-code">COFLIRA / 03</span><div class="product-preview finance-preview"><span>SETEMBRO / 2026</span><strong>R$ 2.480,00</strong><small>Resultado do mês</small><div class="finance-bars"><i></i><i></i><i></i><i></i><i></i></div></div></div><div class="card-body"><p class="card-category" data-i18n="categoryThree">FINANÇAS PESSOAIS</p><h3 data-i18n="appThree">Coflira / Clareza para decidir</h3><p data-i18n="appThreeDescription">Receitas, despesas, metas e simulações para organizar hoje e planejar os próximos meses.</p><a class="card-link" data-cursor="OPEN" href="coflira.html"><span data-i18n="followJourney">Conhecer o Coflira</span><span>↗</span></a></div></article>
-           <article class="app-card reveal" data-cursor="OPEN"><div class="card-visual" style="background:linear-gradient(135deg,#24106B,#a62de8);padding:1.5rem"><span class="card-tag">EM DESENVOLVIMENTO</span><span class="card-code">MIAUFORIA / 04</span><img src="assets/miauforia-preview.svg" alt="" style="width:100%;border-radius:18px;margin-top:1rem"></div><div class="card-body"><p class="card-category">ENTRETENIMENTO FELINO</p><h3>Miauforia / Brincadeiras para gatos</h3><p>Caça, curiosidade e descanso em sessões interativas, com sons próprios e dados sob controle do tutor.</p><a class="card-link" data-cursor="OPEN" href="miauforia.html"><span>Conhecer o Miauforia</span><span>↗</span></a></div></article>
+    <section class="products page-shell section-space" id="products" aria-labelledby="products-title">
+      <div class="section-heading">
+        <div><p class="eyebrow"><span class="section-number">01</span><span data-i18n="productsEyebrow">NOSSO PORTFÓLIO</span></p><h2 id="products-title" data-i18n="productsTitle">Aplicativos para<br><em>o que importa.</em></h2></div>
+        <p class="section-lead" data-i18n="productsIntro">Cada produto parte de uma necessidade concreta. Conheça as ideias que estamos transformando em ferramentas para o dia a dia.</p>
+      </div>
+      <div class="product-grid">
+        <article class="product-card product-alongae">
+          <div class="product-visual">
+            <div class="visual-meta"><span>01 / WELLNESS</span><span class="product-status" data-i18n="statusSoon">EM BREVE</span></div>
+            <div class="stretch-screen"><span class="screen-kicker">PAUSA ATIVA</span><strong data-i18n="alongaeScreen">Hora de<br>respirar.</strong><div class="screen-progress"><i></i></div><span class="screen-foot">03:00&nbsp; · &nbsp;OMBROS E PESCOÇO</span></div>
+            <span class="visual-orbit orbit-a" aria-hidden="true"></span><span class="visual-orbit orbit-b" aria-hidden="true"></span>
+          </div>
+          <div class="product-info"><p class="product-category" data-i18n="alongaeCategory">BEM-ESTAR E ERGONOMIA</p><h3>Alongaê</h3><p data-i18n="alongaeDescription">Pausas guiadas e lembretes gentis para criar uma rotina mais saudável diante da tela.</p><a class="product-link" href="alongae.html"><span data-i18n="learnProduct">Conheça o aplicativo</span><span aria-hidden="true">↗</span></a></div>
+        </article>
 
-             <article class="app-card reveal delay-two" data-cursor="OPEN"><div class="card-visual visual-arqvello"><span class="card-tag">EM BREVE</span><span class="card-code">SENTINELA / 04</span><div class="product-preview archive-preview"><span>LEITURA LOCAL</span><strong>Contexto<br>pr├│ximo</strong><div class="preview-row"><i></i><b>Wi-Fi / Bluetooth</b></div><div class="preview-row"><i></i><b>Registro da verifica├º├úo</b></div></div></div><div class="card-body"><p class="card-category">INVESTIGA├ç├âO LOCAL</p><h3>Sentinela / Observe antes de concluir</h3><p>Leituras t├®cnicas e hist├│rico local para investigar situa├º├Áes incomuns com responsabilidade.</p><a class="card-link" data-cursor="OPEN" href="sentinela.html"><span>Conhecer o Sentinela</span><span>Ôåù</span></a></div></article>
-</div>
+        <article class="product-card product-arqvello">
+          <div class="product-visual">
+            <div class="visual-meta"><span>02 / ORGANIZATION</span><span class="product-status" data-i18n="statusSoon">EM BREVE</span></div>
+            <div class="archive-screen"><span class="screen-kicker" data-i18n="archiveKicker">ARQUIVO PESSOAL</span><strong data-i18n="archiveTitle">Tudo no<br>seu lugar.</strong><div class="file-row"><i>PDF</i><span data-i18n="fileOne">Conta de energia</span><b>›</b></div><div class="file-row"><i>IMG</i><span data-i18n="fileTwo">Documento pessoal</span><b>›</b></div></div>
+          </div>
+          <div class="product-info"><p class="product-category" data-i18n="arqvelloCategory">ARQUIVO DIGITAL</p><h3>ArqVello</h3><p data-i18n="arqvelloDescription">Digitalize, organize e encontre documentos importantes com privacidade e controle local.</p><a class="product-link" href="arqvello.html"><span data-i18n="learnProduct">Conheça o aplicativo</span><span aria-hidden="true">↗</span></a></div>
+        </article>
+
+        <article class="product-card product-coflira">
+          <div class="product-visual">
+            <div class="visual-meta"><span>03 / PERSONAL FINANCE</span><span class="product-status" data-i18n="statusPreparing">EM PREPARAÇÃO</span></div>
+            <div class="finance-screen"><span class="screen-kicker" data-i18n="financeKicker">RESUMO DO MÊS</span><strong>R$ 2.480<span>,00</span></strong><span class="finance-caption" data-i18n="financeCaption">disponível para planejar</span><div class="finance-chart"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="chart-labels"><span>01</span><span>15</span><span>30</span></div></div>
+          </div>
+          <div class="product-info"><p class="product-category" data-i18n="cofliraCategory">FINANÇAS PESSOAIS</p><h3>Coflira</h3><p data-i18n="cofliraDescription">Receitas, despesas e metas organizadas para ajudar você a decidir com mais tranquilidade.</p><a class="product-link" href="coflira.html"><span data-i18n="learnProduct">Conheça o aplicativo</span><span aria-hidden="true">↗</span></a></div>
+        </article>
+
+        <article class="product-card product-miauforia">
+          <div class="product-visual">
+            <div class="visual-meta"><span>04 / CAT ENTERTAINMENT</span><span class="product-status" data-i18n="statusDeveloping">EM DESENVOLVIMENTO</span></div>
+            <img class="miauforia-preview" src="assets/miauforia-preview.svg" alt="" width="600" height="340" loading="lazy" decoding="async">
+            <span class="miauforia-label">MIAUFORIA <b>✳</b></span>
+          </div>
+          <div class="product-info"><p class="product-category" data-i18n="miauforiaCategory">ENTRETENIMENTO FELINO</p><h3>Miauforia</h3><p data-i18n="miauforiaDescription">Brincadeiras interativas para estimular a curiosidade e o bem-estar dos gatos.</p><a class="product-link" href="miauforia.html"><span data-i18n="learnProduct">Conheça o aplicativo</span><span aria-hidden="true">↗</span></a></div>
+        </article>
+
+        <article class="product-card product-sentinela">
+          <div class="product-visual">
+            <div class="visual-meta"><span>05 / DIGITAL SAFETY</span><span class="product-status" data-i18n="statusSoon">EM BREVE</span></div>
+            <div class="sentinel-screen"><div class="radar-ring"><i></i><i></i><b></b></div><div class="radar-readout"><span class="screen-kicker" data-i18n="sentinelaKicker">ANÁLISE LOCAL</span><strong data-i18n="sentinelaScreen">Observe.<br>Entenda.</strong><small>WI-FI&nbsp; · &nbsp;BLUETOOTH</small></div></div>
+          </div>
+          <div class="product-info"><p class="product-category" data-i18n="sentinelaCategory">INVESTIGAÇÃO DIGITAL</p><h3>Sentinela</h3><p data-i18n="sentinelaDescription">Leituras técnicas locais para entender situações incomuns e investigar com responsabilidade.</p><a class="product-link" href="sentinela.html"><span data-i18n="learnProduct">Conheça o aplicativo</span><span aria-hidden="true">↗</span></a></div>
+        </article>
+      </div>
     </section>
 
-       <section class="signal-band section-shell reveal scroll-scene" aria-labelledby="signal-title"><div class="signal-decoration" aria-hidden="true"><span></span><span></span><span></span><span></span></div><div><p class="eyebrow"><span>03</span><span data-i18n="signalEyebrow">O PADRÃO NEXULVI</span></p><h2 id="signal-title" data-i18n="signalTitle">Menos ruído.<br><em>Mais intenção.</em></h2></div><p data-i18n="signalCopy">Não colecionamos recursos. Construímos o essencial, explicamos os limites e evitamos transformar sua rotina em mais uma fonte de notificações e dados dispersos.</p></section>
+    <section class="approach" id="about" aria-labelledby="about-title">
+      <div class="page-shell approach-inner">
+        <div class="approach-copy"><p class="eyebrow"><span class="section-number">02</span><span data-i18n="aboutEyebrow">SOBRE A NEXULVI</span></p><h2 id="about-title" data-i18n="aboutTitle">Um estúdio independente.<br><em>Produtos com intenção.</em></h2><p data-i18n="aboutDescription">A Nexulvi é uma empresa de produtos digitais. Unimos estratégia, design e engenharia para transformar ideias em aplicativos úteis, claros e agradáveis de usar.</p><a class="approach-link" href="#contact"><span data-i18n="talkToUs">Vamos conversar</span><span aria-hidden="true">↗</span></a></div>
+        <div class="principles" aria-label="Princípios da Nexulvi">
+          <article class="principle"><span class="principle-index">01</span><div><h3 data-i18n="principleOneTitle">Utilidade primeiro</h3><p data-i18n="principleOneText">Cada função precisa resolver uma necessidade real.</p></div><span class="principle-symbol" aria-hidden="true">↗</span></article>
+          <article class="principle"><span class="principle-index">02</span><div><h3 data-i18n="principleTwoTitle">Privacidade por padrão</h3><p data-i18n="principleTwoText">Transparência e cuidado desde o início do produto.</p></div><span class="principle-symbol" aria-hidden="true">⌑</span></article>
+          <article class="principle"><span class="principle-index">03</span><div><h3 data-i18n="principleThreeTitle">Tecnologia com clareza</h3><p data-i18n="principleThreeText">Experiências simples, mesmo quando a tecnologia é complexa.</p></div><span class="principle-symbol" aria-hidden="true">✳</span></article>
+        </div>
+      </div>
+    </section>
 
-       <section class="support section-shell section-spacing" id="support" aria-labelledby="support-title"><div class="support-panel reveal"><div class="support-copy"><p class="eyebrow"><span>04</span><span data-i18n="supportEyebrow">VAMOS CONVERSAR</span></p><h2 id="support-title" data-i18n="supportTitle">Acompanhe a próxima<br><em>ideia da Nexulvi.</em></h2><p data-i18n="supportCopy">Tem uma sugestão, encontrou algo a melhorar ou quer falar sobre os produtos? Escreva. Construir com atenção também é ouvir quem usa.</p><a class="button button-light" href="mailto:leonardodacostabonfim@gmail.com"><span data-i18n="supportButton">Enviar uma mensagem</span><span aria-hidden="true">↗</span></a></div><div class="qr-placeholder" role="img" aria-label="Visual decorativo de produtos Nexulvi"><div class="qr-frame"><div class="qr-pattern"></div></div><span data-i18n="qrLabel">NEXULVI // PRODUCT NOTES</span><small data-i18n="qrNote">Ideias em desenvolvimento</small></div></div></section>
+    <section class="contact page-shell" id="contact" aria-labelledby="contact-title">
+      <div class="contact-panel"><div><p class="eyebrow"><span class="section-number">03</span><span data-i18n="contactEyebrow">FALE COM A NEXULVI</span></p><h2 id="contact-title" data-i18n="contactTitle">Tem uma ideia?<br><em>Vamos conversar.</em></h2><p data-i18n="contactDescription">Dúvidas, sugestões ou interesse em acompanhar nossos produtos? Estamos por aqui.</p></div><a class="button button-light" href="mailto:leonardodacostabonfim@gmail.com"><span data-i18n="contactCta">Enviar um e-mail</span><span aria-hidden="true">↗</span></a></div>
+    </section>
   </main>
 
-    <footer class="site-footer section-shell"><div class="footer-top"><a class="brand" href="#top" aria-label="Nexulvi - início"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>NEXULVI</span></a><p data-i18n="footerTagline">Produtos digitais para a vida real.</p><a class="back-top" href="#top" data-i18n="backTop">Voltar ao topo ↑</a></div><div class="footer-bottom"><span>© 2026 Nexulvi. <span data-i18n="rights">Todos os direitos reservados.</span></span><span class="footer-status"><i></i><span data-i18n="status">Produtos em construção</span></span><span><a href="privacidade-miauforia.html">Privacidade Miauforia</a> · <span data-i18n="madeWith">Feito com curiosidade e código.</span></span></div></footer>
+  <footer class="site-footer page-shell">
+    <div class="footer-main"><a class="brand" href="#top" aria-label="Nexulvi — início"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>NEXULVI</span></a><p data-i18n="footerTagline">Produtos digitais independentes para a vida real.</p><a class="back-top" href="#top" data-i18n="backTop">Voltar ao topo ↑</a></div>
+    <div class="footer-bottom"><span>© 2026 Nexulvi. <span data-i18n="rights">Todos os direitos reservados.</span></span><nav aria-label="Políticas de privacidade"><a href="privacidade-alongae.html">Alongaê</a><a href="privacidade-miauforia.html">Miauforia</a><a href="privacidade-sentinela.html">Sentinela</a></nav><a href="mailto:leonardodacostabonfim@gmail.com">leonardodacostabonfim@gmail.com</a></div>
+  </footer>
+  <p class="sr-only" id="language-status" aria-live="polite" aria-atomic="true"></p>
   <script src="script.js"></script>
 </body>
 </html>

@@ -10,7 +10,7 @@ const publicFiles = [
   '404.html', 'alongae.html', 'apps.css', 'apps.js', 'arqvello.html', 'coflira.html',
   'favicon.svg', 'index.html', 'miauforia.html', 'privacidade-alongae.html',
   'privacidade-miauforia.html', 'privacidade-sentinela.html', 'robots.txt', 'script.js',
-  'sentinela.html', 'site.webmanifest', 'sitemap.xml', 'stereo-scene.js', 'styles.css'
+  'sentinela.html', 'site.webmanifest', 'sitemap.xml', 'styles.css'
 ];
 
 async function minify(file, loader) {
@@ -29,10 +29,13 @@ async function build() {
     fs.copyFileSync(source, path.join(output, file));
   }
 
-  fs.cpSync(path.join(root, 'assets'), path.join(output, 'assets'), { recursive: true });
+  fs.cpSync(path.join(root, 'assets'), path.join(output, 'assets'), {
+    recursive: true,
+    filter: (source) => !source.split(path.sep).includes('vendor')
+  });
   await Promise.all([
     ...['styles.css', 'apps.css'].map((file) => minify(file, 'css')),
-    ...['script.js', 'apps.js', 'stereo-scene.js'].map((file) => minify(file, 'js'))
+    ...['script.js', 'apps.js'].map((file) => minify(file, 'js'))
   ]);
   console.log(`Build concluído em ${output}`);
 }
