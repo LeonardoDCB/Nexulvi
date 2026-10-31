@@ -1,0 +1,20 @@
+{
+  "locales": [
+    "en-US",
+    "es-ES",
+    "en-GB",
+    "es-419",
+    "de-DE",
+    "fr-FR",
+    "it-IT",
+    "pt-PT",
+    "nl-NL",
+    "ja-JP",
+    "ko-KR",
+    "hi-IN",
+    "id",
+    "tr-TR",
+    "pl-PL"
+  ],
+  "sourceDigest": "550163589271bfd7226010492b1059bcfaab6274a741393fb370161e2240f428"
+}

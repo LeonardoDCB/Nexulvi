@@ -15,6 +15,24 @@
       try { localStorage.setItem(key, value); } catch { /* Storage can be unavailable in private contexts. */ }
     }
   };
+  const interfaceLabels = {
+    'pt-BR': ['Ativar modo claro', 'Ativar modo escuro', 'Abrir menu', 'Fechar menu'],
+    'en-US': ['Enable light mode', 'Enable dark mode', 'Open menu', 'Close menu'],
+    'es-ES': ['Activar el modo claro', 'Activar el modo oscuro', 'Abrir menú', 'Cerrar menú'],
+    'en-GB': ['Enable light mode', 'Enable dark mode', 'Open menu', 'Close menu'],
+    'es-419': ['Activar el modo claro', 'Activar el modo oscuro', 'Abrir menú', 'Cerrar menú'],
+    'de-DE': ['Hellmodus aktivieren', 'Dunkelmodus aktivieren', 'Menü öffnen', 'Menü schließen'],
+    'fr-FR': ['Activer le mode clair', 'Activer le mode sombre', 'Ouvrir le menu', 'Fermer le menu'],
+    'it-IT': ['Attiva la modalità chiara', 'Attiva la modalità scura', 'Apri il menu', 'Chiudi il menu'],
+    'pt-PT': ['Ativar modo claro', 'Ativar modo escuro', 'Abrir menu', 'Fechar menu'],
+    'nl-NL': ['Lichte modus inschakelen', 'Donkere modus inschakelen', 'Menu openen', 'Menu sluiten'],
+    'ja-JP': ['ライトモードを有効にする', 'ダークモードを有効にする', 'メニューを開く', 'メニューを閉じる'],
+    'ko-KR': ['라이트 모드 켜기', '다크 모드 켜기', '메뉴 열기', '메뉴 닫기'],
+    'hi-IN': ['लाइट मोड चालू करें', 'डार्क मोड चालू करें', 'मेनू खोलें', 'मेनू बंद करें'],
+    id: ['Aktifkan mode terang', 'Aktifkan mode gelap', 'Buka menu', 'Tutup menu'],
+    'tr-TR': ['Açık modu etkinleştir', 'Koyu modu etkinleştir', 'Menüyü aç', 'Menüyü kapat'],
+    'pl-PL': ['Włącz tryb jasny', 'Włącz tryb ciemny', 'Otwórz menu', 'Zamknij menu']
+  }[root.lang] || ['Ativar modo claro', 'Ativar modo escuro', 'Abrir menu', 'Fechar menu'];
 
   const translations = {
     pt: {
@@ -161,7 +179,7 @@
     const isDark = theme === 'dark';
     root.dataset.theme = isDark ? 'dark' : 'light';
     themeToggle.setAttribute('aria-pressed', String(isDark));
-    themeToggle.setAttribute('aria-label', isDark ? 'Ativar modo claro' : 'Ativar modo escuro');
+    themeToggle.setAttribute('aria-label', isDark ? interfaceLabels[0] : interfaceLabels[1]);
     themeToggle.firstElementChild.textContent = isDark ? '☼' : '◐';
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', isDark ? '#111613' : '#f7f8f4');
     storage.set('nexulvi-theme', isDark ? 'dark' : 'light');
@@ -171,16 +189,16 @@
     mobileNav.toggleAttribute('hidden', !open);
     mobileNav.toggleAttribute('inert', !open);
     menuToggle.setAttribute('aria-expanded', String(open));
-    menuToggle.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+    menuToggle.setAttribute('aria-label', open ? interfaceLabels[3] : interfaceLabels[2]);
   }
 
-  const savedLanguage = storage.get('nexulvi-language') || 'pt';
-  languageSelect.value = translations[savedLanguage] ? savedLanguage : 'pt';
-  setLanguage(languageSelect.value);
+  const isStaticLocale = root.lang !== 'pt-BR';
+  if (!isStaticLocale) languageSelect.value = 'pt-BR';
+  if (!isStaticLocale) setLanguage('pt');
   const savedTheme = storage.get('nexulvi-theme');
   setTheme(savedTheme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
 
-  languageSelect.addEventListener('change', (event) => setLanguage(event.target.value));
+  if (!isStaticLocale) languageSelect.addEventListener('change', (event) => setLanguage(event.target.value));
   themeToggle.addEventListener('click', () => setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'));
   menuToggle.addEventListener('click', () => setMenu(menuToggle.getAttribute('aria-expanded') !== 'true'));
   mobileNav.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenu(false)));

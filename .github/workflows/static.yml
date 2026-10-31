@@ -44,6 +44,9 @@ jobs:
         run: |
           node --check script.js
           node --check apps.js
+          node --check language-picker.js
+          node --check scripts/build.js
+          node --check scripts/generate-locales.js
           node --check stereo-scene.js
           node --check servidor-local.js
       - name: Build public artifact
