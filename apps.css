@@ -12,3 +12,23 @@
 .legal-section{scroll-margin-top:2rem}.legal-updated{margin:.8rem 0 2rem;color:var(--app-muted);font:500 .78rem 'DM Mono',monospace}.legal-copy{max-width:820px;padding:2rem;border:1px solid rgba(var(--app-accent-rgb),.24);border-radius:16px;background:rgba(255,255,255,.025)}.legal-copy h3{margin:2rem 0 .55rem;color:var(--app-accent);font:700 1.2rem 'Space Grotesk',sans-serif}.legal-copy h3:first-of-type{margin-top:0}.legal-copy p{margin:.75rem 0;color:var(--app-muted);font-size:1rem}.legal-copy a{color:var(--app-accent);text-decoration:underline;text-underline-offset:3px}.legal-copy a:focus-visible{outline:3px solid var(--app-secondary);outline-offset:3px}
 .menu-open{overflow:hidden}@media(max-width:760px){.app-mobile-nav[inert]{display:none}.legal-copy{padding:1.25rem;border-radius:10px}}
 html:lang(ja-JP),html:lang(ko-KR){font-family:system-ui,"Noto Sans CJK JP","Noto Sans CJK KR",sans-serif}html:lang(hi-IN){font-family:system-ui,"Noto Sans Devanagari",sans-serif}html:lang(ja-JP) h1,html:lang(ja-JP) h2,html:lang(ja-JP) h3,html:lang(ja-JP) .app-tagline,html:lang(ko-KR) h1,html:lang(ko-KR) h2,html:lang(ko-KR) h3,html:lang(ko-KR) .app-tagline,html:lang(hi-IN) h1,html:lang(hi-IN) h2,html:lang(hi-IN) h3,html:lang(hi-IN) .app-tagline{letter-spacing:normal}
+
+/* Escala de leitura ampliada nos aplicativos e respectivas políticas. */
+body{font-size:18px;line-height:1.7}
+.app-brand{font-size:15px}
+.app-nav{font-size:16px}
+.app-mobile-nav a{font-size:17px}
+.eyebrow{font-size:13px}
+.app-parent,.legal-updated{font-size:14px}
+.app-lead{font-size:clamp(18px,1.4vw,21px);line-height:1.75}
+.button{font-size:16px;min-height:54px}
+.feature-number,.screen-label{font-size:12px}
+.feature p,.faq p,.privacy p,.privacy li,.section-copy{font-size:18px;line-height:1.75}
+.screen-card small,.store small{font-size:14px}
+.privacy-list span{font-size:16px}
+.app-footer{font-size:15px;line-height:1.7}
+.faq summary{font-size:18px;line-height:1.5}
+.legal-copy p{font-size:18px;line-height:1.8}
+.feature,.faq details,.privacy,.legal-copy{border-radius:14px}
+.feature p,.faq p,.privacy p,.privacy li,.section-copy,.legal-copy p{max-width:72ch}
+@media(max-width:760px){.app-lead{font-size:18px}.app-mobile-nav a{font-size:18px}.app-footer{font-size:15px}}

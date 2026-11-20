@@ -34,7 +34,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          node-version: '22.18.0'
+          node-version: '24.19.0'
           cache: npm
       - name: Install build dependencies
         run: npm ci
@@ -49,8 +49,15 @@ jobs:
           node --check scripts/generate-locales.js
           node --check stereo-scene.js
           node --check servidor-local.js
+          node --check commercial.js
+          node --check site.config.js
+          node --check scripts/commercial.js
+          node --check scripts/preview.js
+          node --check scripts/browser-test.js
       - name: Build public artifact
         run: node scripts/build.js
+      - name: Test static artifact
+        run: npm test
       - name: Upload artifact
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
         with:

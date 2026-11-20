@@ -5,6 +5,8 @@ Thumbs.db
 # Dependências e builds futuros
 node_modules/
 dist/
+test-results/
+.lighthouseci/
 .astro/
 
 # Configurações locais

@@ -9,7 +9,7 @@ const crypto = require('node:crypto');
 const root = path.resolve(__dirname, '..');
 const output = path.join(root, 'localized');
 const translationCachePath = path.join(root, '.localization-cache.json');
-const siteUrl = 'https://leonardodcb.github.io/Nexulvi';
+const siteUrl = require('../site.config').siteUrl.replace(/\/$/, '');
 const locales = [
   ['pt-BR', 'pt-BR'], ['en-US', 'en-US'], ['es-ES', 'es-ES'], ['en-GB', 'en-GB'],
   ['es-419', 'es-419'], ['de-DE', 'de-DE'], ['fr-FR', 'fr-FR'], ['it-IT', 'it-IT'],
@@ -37,7 +37,7 @@ function shieldBrands(value) {
 const translationSources = [...htmlFiles, 'apps.js', 'script.js'];
 function sourceDigest() {
   const hash = crypto.createHash('sha256');
-  for (const file of translationSources) hash.update(file).update('\0').update(fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n/g, '\n'));
+  for (const file of translationSources) hash.update(file).update('\0').update(fs.readFileSync(path.join(root, file === 'index.html' ? 'aplicativos.html' : file), 'utf8').replace(/\r\n/g, '\n'));
   return hash.digest('hex');
 }
 const entityMap = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'", '&nbsp;': ' ' };
@@ -189,9 +189,9 @@ async function localizeHtml(source, locale, language, homeTranslations) {
   html = html.replace(/<link\b([^>]*\brel=['"]canonical['"][^>]*?)\bhref=['"][^'"]*['"]([^>]*)>/i, (_match, before, after) => `<link${before}href="${siteUrl}/${locale}/${canonicalPath}"${after}>`);
   html = html.replace(/(href|src)=(['"])(assets\/|styles\.css|apps\.css|script\.js|apps\.js|language-picker\.js|favicon\.svg|site\.webmanifest)([^'"]*)\2/gi, '$1=$2../$3$4$2');
   const alternates = locales.map(([code]) => {
-    const target = code === 'pt-BR' ? `${siteUrl}/${canonicalPath}` : `${siteUrl}/${code}/${canonicalPath}`;
+    const target = code === 'pt-BR' ? `${siteUrl}/${sourceFileForCanonical === 'index.html' ? 'aplicativos.html' : canonicalPath}` : `${siteUrl}/${code}/${canonicalPath}`;
     return `<link rel="alternate" hreflang="${code}" href="${target}">`;
-  }).join('') + `<link rel="alternate" hreflang="x-default" href="${siteUrl}/${canonicalPath}">`;
+  }).join('') + `<link rel="alternate" hreflang="x-default" href="${siteUrl}/${sourceFileForCanonical === 'index.html' ? 'aplicativos.html' : canonicalPath}">`;
   html = html.replace(/<\/head>/i, `${alternates}</head>`);
   html = html.replace(/<meta\s+property=['"]og:url['"]\s+content=['"][^'"]*['"]\s*\/?\s*>/i, `<meta property="og:url" content="${siteUrl}/${locale}/${canonicalPath}">`);
   html = html.replace(/<meta\s+property=['"]og:locale['"]\s+content=['"][^'"]*['"]\s*\/?\s*>/i, `<meta property="og:locale" content="${locale.replace('-', '_')}">`);
@@ -270,7 +270,7 @@ async function main() {
     }
     fs.mkdirSync(directory, { recursive: true });
     for (const file of htmlFiles) {
-      const sourcePath = path.join(root, file);
+      const sourcePath = path.join(root, file === 'index.html' ? 'aplicativos.html' : file);
       const source = fs.readFileSync(sourcePath, 'utf8');
       sourceFileForCanonical = file;
       const homeLanguage = { 'en-US': 'en', 'es-ES': 'es', 'de-DE': 'de', 'fr-FR': 'fr' }[locale];

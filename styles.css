@@ -1,35 +1,35 @@
 :root {
   color-scheme: light;
-  --bg: #f7f8f4;
+  --bg: #f5f8fc;
   --surface: #ffffff;
-  --surface-soft: #eef0e9;
-  --ink: #171b19;
-  --muted: #626b65;
-  --line: #dfe3dc;
-  --accent: #c8f169;
+  --surface-soft: #edf2f7;
+  --ink: #142235;
+  --muted: #40536a;
+  --line: #cbd5e1;
+  --accent: #b8f36a;
   --accent-ink: #17210a;
-  --dark: #171c19;
-  --dark-muted: #aeb8ae;
+  --dark: #102033;
+  --dark-muted: #d0d9e2;
   --shell: 1220px;
   --gutter: clamp(22px, 5vw, 72px);
 }
 
 [data-theme="dark"] {
   color-scheme: dark;
-  --bg: #111613;
-  --surface: #1a211c;
-  --surface-soft: #222a24;
-  --ink: #f2f4ed;
-  --muted: #a4ada4;
-  --line: #343d36;
-  --dark: #0b100d;
-  --dark-muted: #aeb8ae;
+  --bg: #0e1825;
+  --surface: #162538;
+  --surface-soft: #1c2d42;
+  --ink: #f4f7fb;
+  --muted: #c0ccda;
+  --line: #3b4d63;
+  --dark: #09121d;
+  --dark-muted: #d0d9e2;
   --accent-ink: #18200f;
 }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 88px; }
-body { margin: 0; background: var(--bg); color: var(--ink); font-family: Inter, Arial, sans-serif; font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: Inter, Arial, sans-serif; font-size: 18px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
 body:has(.mobile-nav:not([hidden])) { overflow: hidden; }
 a { color: inherit; text-decoration: none; }
 button, select { color: inherit; font: inherit; }
@@ -39,6 +39,10 @@ button { cursor: pointer; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .skip-link { position: fixed; z-index: 100; top: 12px; left: 12px; padding: 10px 16px; transform: translateY(-150%); background: var(--accent); color: #171b19; font-weight: 700; }
 .skip-link:focus { transform: translateY(0); }
+:focus-visible { outline: 3px solid #537826; outline-offset: 4px; }
+[data-theme="dark"] :focus-visible { outline-color: #c8f169; }
+.catalog-back { padding-block: 18px; font-size: 13px; }
+.catalog-back a { display: inline-block; padding-block: 8px; text-decoration: underline; text-underline-offset: 4px; }
 
 .site-header { position: relative; z-index: 5; display: flex; align-items: center; justify-content: space-between; width: min(calc(100% - var(--gutter) * 2), var(--shell)); height: 82px; margin: auto; border-bottom: 1px solid var(--line); }
 .brand { display: inline-flex; align-items: center; gap: 11px; font-family: "Space Grotesk", Inter, sans-serif; font-size: 15px; font-weight: 700; letter-spacing: .14em; }
@@ -67,7 +71,7 @@ button { cursor: pointer; }
 h1, h2, h3, p { margin-top: 0; }
 h1, h2 { font-family: "Space Grotesk", Inter, sans-serif; font-weight: 600; letter-spacing: -.065em; }
 h1 { max-width: 690px; margin-bottom: 21px; font-size: clamp(50px, 6.15vw, 82px); line-height: .99; }
-h1 em, h2 em { color: #789e32; font-style: normal; }
+h1 em, h2 em { color: #087f8c; font-style: normal; }
 [data-theme="dark"] h1 em, [data-theme="dark"] h2 em { color: var(--accent); }
 .hero-description { max-width: 510px; margin-bottom: 28px; color: var(--muted); font-size: 16px; line-height: 1.75; }
 .hero-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 22px; }
@@ -135,17 +139,17 @@ h2 { margin-bottom: 0; font-size: clamp(39px, 5vw, 62px); line-height: 1.04; }
 .archive-screen { padding: 14px; }
 .archive-screen strong { margin: 7px 0 12px; font-size: 23px; }
 .file-row { display: flex; align-items: center; gap: 7px; padding: 6px 0; border-top: 1px solid #dbe2e8; font-size: 8px; }
-.file-row i { padding: 3px 4px; background: #e4ebf2; color: #58728b; font-family: "DM Mono", monospace; font-size: 6px; font-style: normal; }
+.file-row i { padding: 3px 4px; background: #e4ebf2; color: #47627b; font-family: "DM Mono", monospace; font-size: 6px; font-style: normal; }
 .file-row span { flex: 1; }
 .file-row b { font-size: 13px; font-weight: 400; }
 .finance-screen { min-height: 158px; background: #fffaf1; }
 .finance-screen > strong { display: block; margin-top: 11px; font-family: "Space Grotesk", sans-serif; font-size: 27px; letter-spacing: -.06em; }
 .finance-screen > strong span { font-size: 15px; }
-.finance-caption { display: block; margin-top: -2px; color: #827b70; font-size: 7px; }
+.finance-caption { display: block; margin-top: -2px; color: #6d665b; font-size: 7px; }
 .finance-chart { display: flex; height: 32px; align-items: end; gap: 5px; margin-top: 13px; border-bottom: 1px solid #e2dacc; }
 .finance-chart i { flex: 1; background: #bb9866; }
 .finance-chart i:nth-child(1) { height: 35%; }.finance-chart i:nth-child(2) { height: 65%; }.finance-chart i:nth-child(3) { height: 48%; }.finance-chart i:nth-child(4) { height: 76%; }.finance-chart i:nth-child(5) { height: 57%; }.finance-chart i:nth-child(6) { height: 86%; }.finance-chart i:nth-child(7) { height: 61%; }.finance-chart i:nth-child(8) { height: 92%; }.finance-chart i:nth-child(9) { height: 68%; }.finance-chart i:nth-child(10) { height: 78%; }.finance-chart i:nth-child(11) { height: 55%; }.finance-chart i:nth-child(12) { height: 100%; }
-.chart-labels { display: flex; justify-content: space-between; margin-top: 4px; color: #827b70; font-family: "DM Mono", monospace; font-size: 6px; }
+.chart-labels { display: flex; justify-content: space-between; margin-top: 4px; color: #6d665b; font-family: "DM Mono", monospace; font-size: 6px; }
 .miauforia-preview { width: min(82%, 310px); height: auto; border-radius: 8px; }
 .miauforia-label { position: absolute; right: 18px; bottom: 13px; left: 18px; display: flex; justify-content: space-between; font-family: "DM Mono", monospace; font-size: 7px; letter-spacing: .12em; }
 .miauforia-label b { color: #dfaa55; font-size: 12px; }
@@ -157,7 +161,7 @@ h2 { margin-bottom: 0; font-size: clamp(39px, 5vw, 62px); line-height: 1.04; }
 .radar-ring i:nth-child(2) { top: 62px; left: 29px; }
 .radar-ring b { position: absolute; top: 20px; right: 20px; width: 34px; height: 34px; border-top: 1px solid #6f9690; border-radius: 0 100% 0 0; }
 .radar-readout strong { display: block; margin-top: 6px; font-family: "Space Grotesk", sans-serif; font-size: 20px; letter-spacing: -.05em; line-height: 1; }
-.radar-readout small { display: block; margin-top: 11px; color: #657771; font-family: "DM Mono", monospace; font-size: 6px; }
+.radar-readout small { display: block; margin-top: 11px; color: #52665e; font-family: "DM Mono", monospace; font-size: 6px; }
 .product-info { padding: 20px 20px 22px; }
 .product-category { margin-bottom: 8px; color: var(--muted); font-family: "DM Mono", monospace; font-size: 8px; letter-spacing: .1em; }
 .product-info h3 { margin-bottom: 7px; font-family: "Space Grotesk", sans-serif; font-size: 23px; font-weight: 600; letter-spacing: -.04em; }
@@ -255,3 +259,31 @@ h2 { margin-bottom: 0; font-size: clamp(39px, 5vw, 62px); line-height: 1.04; }
 html:lang(ja-JP) body, html:lang(ko-KR) body { font-family: system-ui, "Noto Sans CJK JP", "Noto Sans CJK KR", sans-serif; }
 html:lang(hi-IN) body { font-family: system-ui, "Noto Sans Devanagari", sans-serif; }
 html:lang(ja-JP) h1, html:lang(ja-JP) h2, html:lang(ja-JP) h3, html:lang(ja-JP) .app-tagline, html:lang(ko-KR) h1, html:lang(ko-KR) h2, html:lang(ko-KR) h3, html:lang(ko-KR) .app-tagline, html:lang(hi-IN) h1, html:lang(hi-IN) h2, html:lang(hi-IN) h3, html:lang(hi-IN) .app-tagline { letter-spacing: normal; }
+
+/* Tamanhos mínimos para leitura confortável no catálogo de produtos. */
+.desktop-nav a, .mobile-nav a { font-size: 15px; }
+.eyebrow { font-size: 12px; }
+.hero-description { font-size: 18px; }
+.button { min-height: 54px; font-size: 16px; }
+.text-link { font-size: 16px; }
+.hero-note { font-size: 13px; }
+.section-lead { font-size: 18px; }
+.product-category { font-size: 12px; }
+.product-status { font-size: 12px; }
+.product-info > p:not(.product-category) { min-height: 0; font-size: 16px; line-height: 1.75; }
+.product-link { min-height: 50px; font-size: 15px; }
+.approach-copy > p:not(.eyebrow) { font-size: 17px; }
+.approach-link { font-size: 15px; }
+.principle-index { font-size: 12px; }
+.principle h3 { font-size: 18px; }
+.principle p { font-size: 16px; line-height: 1.65; }
+.contact-panel > div > p:last-child { font-size: 16px; }
+.footer-main p { font-size: 15px; }
+.back-top, .footer-bottom { font-size: 14px; }
+@media (max-width: 640px) {
+  .eyebrow { font-size: 11px; }
+  .hero-description, .section-lead, .approach-copy > p:not(.eyebrow) { font-size: 17px; }
+  h1 { font-size: clamp(44px, 11vw, 62px); }
+  .product-info > p:not(.product-category) { font-size: 16px; }
+  .footer-main p { font-size: 15px; }
+}

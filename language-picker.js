@@ -64,7 +64,8 @@
   select.addEventListener('change', (event) => {
     event.stopImmediatePropagation();
     const targetLocale = select.value;
-    const page = currentPage === 'index.html' ? '' : currentPage;
+    const isCatalogPicker = select.hasAttribute('data-catalog-language') || currentPage === 'aplicativos.html' || (currentLocale !== 'pt-BR' && currentPage === 'index.html');
+    const page = isCatalogPicker ? (targetLocale === 'pt-BR' ? 'aplicativos.html' : '') : (currentPage === 'index.html' ? '' : currentPage);
     const target = targetLocale === 'pt-BR'
       ? `${basePath}${page}`
       : `${basePath}${targetLocale}/${page || 'index.html'}`;
